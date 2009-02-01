@@ -1,0 +1,31 @@
+/* Styles for Crowd Favorite cf_post_meta class */
+.clear {
+	clear: both;
+	float: none;
+}
+.cf_meta_set textarea {
+	width: 98%;
+	height: 4em;
+	margin: 0;
+}
+.cf_meta_set label.before {
+	display: block;
+	float: left;
+	margin-right: 15px;
+	padding-top: 7px;
+	width: 150px;
+}
+.cf_meta_set label.after {
+	margin-left: 15px;
+}
+.cf_meta_set input.full {
+	width: 80%;
+}
+.cf_meta_set input {
+/*
+	width: 75%;
+*/
+}
+.cf_meta_set input.short {
+	width: 25%;
+}
