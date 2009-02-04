@@ -1,19 +1,21 @@
 <?php
 /*
-Plugin Name: CrowdFavorite Post Metadata Manager
+Plugin Name: CF Post Meta
 Plugin URI: http://crowdfavorite.com/wordpress/
-Description: Facilitates adding additinal metadata fields to posts through the standard post entry interface. 
-Version: 1.0
+Description: CrowdFavorite Post Metadata Manager: Facilitates adding additinal metadata fields to posts through the standard post entry interface. 
+Version: 1.5
 Author: Crowd Favorite
 Author URI: http://crowdfavorite.com
 */	
-/* Tested back to PHP 4.4.7 & up to PHP 5.2.6 */
+/* Tested back to PHP 4.4.7 & up to PHP 5.2.8 */
 	
 	/**
-	 * 
+	 * Plugin version ID
 	 */
+	define('CF_META_VERSION', '1.5');
 	
-	define('CF_META_VERSION', '1.0');
+	// PHP < 4.4 hax
+	if(!defined('PHP_EOL')) { define('PHP_EOL',"\n"); }
 	
 	function cf_meta_request_handler() {
 		if(isset($_GET['cf_meta_action'])) {
@@ -36,20 +38,30 @@ Author URI: http://crowdfavorite.com
 	/**
 	 * assign post actions
 	 */
-	add_action('edit_form_advanced','cf_meta_edit_post');
-	add_action('save_post','cf_meta_save_post',10,2);
-	if(isset($_GET['cfm_error']) || isset($_GET['cfm_notice'])) {
-		add_action('admin_notices','cf_meta_notices');
-	}
-	/**
-	 * assign page actions
-	 */
-	add_action('edit_page_form','cf_meta_edit_page');
-	/**
-	 * Include necessary CSS
-	 */
 	if(is_admin()) {
-		add_action('admin_head','cf_meta_head_items');
+		add_action('admin_head','cf_meta_add_boxes',11);
+		add_action('save_post','cf_meta_save_post',10,2);
+		if(isset($_GET['cfm_error']) || isset($_GET['cfm_notice'])) {
+			add_action('admin_notices','cf_meta_notices');
+		}
+		/**
+		 * Include necessary CSS
+		 */
+		add_action('admin_head','cf_meta_head_items',10);
+	}
+			
+	/**
+	 * Run in the appropriate context
+	 */
+	function cf_meta_add_boxes() {
+		global $cfmeta,$post;
+		$type = cf_meta_get_type();
+		if($type == 'post') {
+			cf_meta_edit_post();
+		}
+		elseif($type == 'page') {
+			cf_meta_edit_page();
+		}
 	}
 	
 	/**
@@ -69,7 +81,40 @@ Author URI: http://crowdfavorite.com
 		$cfmeta = cf_meta_gimme('page',$post->ID);
 		$cfmeta->display();
 	}
+	
+	/**
+	 * Do the box display code
+	 * @param object $post - the post or page object
+	 * @param array $set - id,title,callback
+	 */
+	function cf_meta_show_box($object,$set) {		
+		global $cfmeta,$post;
+		$cfmeta = cf_meta_gimme(cf_meta_get_type(),$post->ID);
+		$cfmeta->show_set_contents($set);
+	}
 
+	/**
+	 * determine which type we're working on
+	 */
+	function cf_meta_get_type() {
+		global $pagenow;
+		switch(true) {
+			case in_array($pagenow, array('post.php','post-new.php')):
+				return 'post';
+				break;
+			case in_array( $pagenow, array('page.php','page-new.php')):
+				return 'page';
+				break;
+			default:
+				return false;
+		}
+	}
+
+	/**
+	 * Save post handler
+	 * @param int $post_id - id of the post being operated on
+	 * @param object $post - post data object
+	 */
 	function cf_meta_save_post($post_id,$post) {
 		if(isset($_POST['cf_meta_type'])) {
 			if($post->post_type == 'revision') { return; }
@@ -84,6 +129,10 @@ Author URI: http://crowdfavorite.com
 		}
 	}
 	
+	/**
+	 * not yet implemented
+	 * message display handler
+	 */
 	function cf_meta_notices() {
 		if(isset($_GET['cfm_error'])) {
 			if($_GET['cfm_type'] == 'page') {
@@ -121,11 +170,12 @@ Author URI: http://crowdfavorite.com
 	 */
 	function cf_meta_head_items() {
 		echo '<link rel="stylesheet" type="text/css" media="all" href="'.
-				get_bloginfo('wpurl').'/index.php?wp-cf-meta&cf_meta_action=admin_style&ver='.CF_META_VERSION.'" />'.PHP_EOL;
+				get_bloginfo('wpurl').'/index.php?wp-cf-meta&amp;cf_meta_action=admin_style&amp;type='.cf_meta_get_type().'&amp;ver='.CF_META_VERSION.'" />'.PHP_EOL;
 	}
 	
 	/**
 	 * Import CSS File
+	 * For my sanity the CSS is held in a separate file
 	 */
 	function cf_meta_css() {
 		$filepath = ABSPATH.PLUGINDIR.'/cf-post-meta/css/cf-post-meta.css';
@@ -136,6 +186,7 @@ Author URI: http://crowdfavorite.com
 			$f = fopen($filepath,'r');
 			$css = fread($f,filesize($filepath));
 		}
+		
 		header('Content-Type: text/css');
 		header('Content-Length: '.filesize($filepath));
 		echo $css;
