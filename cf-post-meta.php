@@ -38,7 +38,7 @@ Author URI: http://crowdfavorite.com
 	/**
 	 * assign post actions
 	 */
-	if(is_admin()) {
+	if(is_admin() && cf_meta_get_type() !== false) {
 		add_action('admin_head','cf_meta_add_boxes',11);
 		add_action('save_post','cf_meta_save_post',10,2);
 		if(isset($_GET['cfm_error']) || isset($_GET['cfm_notice'])) {
