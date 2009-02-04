@@ -322,12 +322,12 @@
 		function get_input($value=false) {
 			$value = ($value) ? $value : $this->get_value();
 			$class = isset($this->config['label']) ? null : 'class="full" ';
-			return '<input type="'.$this->config['type'].'" name="'.$this->get_id().'" id="'.$this->get_id().'" value="'.$value.'" '.$class.'/>';
+			return '<input type="'.$this->config['type'].'" name="'.$this->get_id().'" id="'.$this->get_id().'" value="'.htmlspecialchars($value).'" '.$class.'/>';
 		}
 	
 		/**
 		 * show the input
-		 * uses 2.6 admin as template, seems to still be valid in 2.7
+		 * uses 2.6 admin as template
 		 */
 		function display($value=false) {
 			$html = '';
@@ -456,7 +456,9 @@
 		 * Override the input output
 		 */
 		function get_input() {
-			// setup the tinyMCE wysiwyg on text areas if config'd
+			/**
+			 * setup the tinyMCE wysiwyg on text areas if configed
+			 */
 			$before = $after = '';
 			if(isset($this->config['wysiwyg']) && $this->config['wysiwyg'] == true) {
 				// tinyMCE needs a spacer to help keep it in line, this can probably be solved with css but for now its good
@@ -468,7 +470,7 @@
 						   <div style="clear:both">&nbsp;</div>';
 			}
 			return $before.'<textarea name="'.$this->get_name().'" id="'.$this->get_id().'" cols="'.$this->cols.'" rows="'.$this->rows.'">'.
-				   $this->get_value().'</textarea>'.$after;
+				   htmlspecialchars($this->get_value()).'</textarea>'.$after;
 		}	
 	}
 	
