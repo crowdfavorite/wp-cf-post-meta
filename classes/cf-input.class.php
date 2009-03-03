@@ -84,7 +84,7 @@
 				);
 			$data = array_merge($data_defaults,$data);
 				
-			$html = '<fieldset class="type_block" id="'.$this->config['block_id'].'_'.$data['index'].'">'.
+			$html = '<fieldset class="type_block" id="'.$this->config['name'].'_'.$data['index'].'">'.
 					'<div class="inside">';
 
 			foreach($this->config['items'] as $item) {
@@ -92,7 +92,7 @@
 				$item_data = (isset($data['items']) && isset($data['items'][$item['name']]) ? $data['items'][$item['name']] : array());
 
 				// override item name and prefix
-				$item['name'] = 'blocks['.$this->config['block_id'].']['.$data['index'].']['.$item['name'].']';
+				$item['name'] = 'blocks['.$this->config['name'].']['.$data['index'].']['.$item['name'].']';
 				$item['prefix'] = $this->set['prefix'];
 				
 				if(class_exists('cf_input_'.$item['type'])) {
@@ -104,7 +104,7 @@
 				$html .= $item->display($item_data);
 			}
 			
-			$html .= '<a href="#" onclick="delete'.$this->config['block_id'].'(jQuery(this).parent()); return false;" class="delete">Delete</a>'.
+			$html .= '<a href="#" onclick="delete'.$this->config['name'].'(jQuery(this).parent()); return false;" class="delete">Delete</a>'.
 					 '</div>'.
 					 '</fieldset>';
 			
@@ -118,7 +118,7 @@
 		function display() {
 			
 			// retrieve previously saved values
-			$data = get_post_meta($this->config['post_id'],$this->config['block_id'], true);
+			$data = get_post_meta($this->config['post_id'],$this->config['name'], true);
 			if ($data != '') {
 				$data = maybe_unserialize($data);
 			}
@@ -129,7 +129,7 @@
 					 '</h4>';
 			
 			// this div just contains the actual items in the group and it's where new elements are inserted
-			$html .= '<div id="'.$this->config['block_id'].'" class="insert_container">';
+			$html .= '<div id="'.$this->config['name'].'" class="insert_container">';
 						
 			if (is_array($this->config['items'])) {
 				// if we have data then we need to display it first
@@ -140,7 +140,7 @@
 				}
 				// else we can just display an empty set 
 				else {
-					$html = $this->make_block_item(array('index' => 1));
+					$html .= $this->make_block_item(array('index' => 1));
 				}
 			}
 			$html .= '</div>'; // this is the end of the .insert_container div
@@ -148,27 +148,27 @@
 			// JS for inserting and removing new elements for repeaters
 			$html .= '
 				<script type="text/javascript" charset="utf-8">
-					function addAnother'.$this->config['block_id'].'() {
-						if (jQuery(\'#'.$this->config['block_id'].'\').children().length > 0) {
-							last_element_index = jQuery(\'#'.$this->config['block_id'].' fieldset:last\').attr(\'id\').match(/'.$this->config['block_id'].'_([0-9])/);
+					function addAnother'.$this->config['name'].'() {
+						if (jQuery(\'#'.$this->config['name'].'\').children().length > 0) {
+							last_element_index = jQuery(\'#'.$this->config['name'].' fieldset:last\').attr(\'id\').match(/'.$this->config['name'].'_([0-9])/);
 							next_element_index = Number(last_element_index[1])+1;
 						} else {
 							next_element_index = 1;
 						}
 						insert_element = \''.str_replace(PHP_EOL,'',trim($this->make_block_item())).'\';
 						insert_element = insert_element.replace(/'.$this->repeater_index_placeholder.'/g, next_element_index);
-						jQuery(insert_element).appendTo(\'#'.$this->config['block_id'].'\');
+						jQuery(insert_element).appendTo(\'#'.$this->config['name'].'\');
 					}
-					function delete'.$this->config['block_id'].'(del_el) {
+					function delete'.$this->config['name'].'(del_el) {
 						if(confirm(\'Are you sure you want to delete this?\')) {
 							jQuery(del_el).parent().remove();
 						}
 					}
 				</script>';
 
-			$html .= '<p class="cf_meta_actions"><a href="#" onclick="addAnother'.$this->config['block_id'].'(); return false;" '.
+			$html .= '<p class="cf_meta_actions"><a href="#" onclick="addAnother'.$this->config['name'].'(); return false;" '.
 				     'class="add_another button-secondary">Add Another '.$this->config['block_label'].'</a></p>'.
-					 '</div><!-- close '.$this->config['block_id'].' wrapper -->';
+					 '</div><!-- close '.$this->config['name'].' wrapper -->';
 			
 			return $html;
 		}
@@ -201,8 +201,8 @@
 		 * If all values for a block item are null then the item is not saved
 		 */
 		function save_group($post) {
-			if (isset($post['blocks'][$this->config['block_id']])) {
-				foreach ($post['blocks'][$this->config['block_id']] as $value) {
+			if (isset($post['blocks'][$this->config['name']])) {
+				foreach ($post['blocks'][$this->config['name']] as $value) {
 					// keep items where all values are empty from being saved
 					$control = '';
 					foreach($value as $item) { $control .= $item; }
@@ -210,10 +210,10 @@
 						$save_array[] = $value;
 					}
 				}
-				return update_post_meta($this->config['post_id'],$this->config['block_id'],$save_array); 
+				return update_post_meta($this->config['post_id'],$this->config['name'],$save_array); 
 			}
 			else {
-				return delete_post_meta($this->config['post_id'],$this->config['block_id']); 
+				return delete_post_meta($this->config['post_id'],$this->config['name']); 
 			}
 		}
 	}
