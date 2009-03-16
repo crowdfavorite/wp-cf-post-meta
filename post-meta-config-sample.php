@@ -13,10 +13,11 @@ $group[] = array(
 			'name' => '_unique meta_name', // required
 			'label' => 'text for field label',
 			'label_position' => 'before/after',
-			'type' => 'checkbox/radio/int(x)/varchar(x)/text/textarea/password(x)', // required
+			'type' => 'checkbox/radio/int(x)/varchar(x)/text/textarea/password(x)/select', // required
 			'length' => array('low','high'), // min/max length for input value - not yet implemented
 			'required' => false,
 			'values' => array('optional','values','for','radio','and','check','boxes') // required for radio/checkbox
+			'options' => array('values','for','select','boxes' OR 'key' => 'value', 'key2' => 'for', 'key3' => 'select', 'key4' => 'boxes') // only required for select boxes.
 			'before' => 'html to put before the element',
 			'after' => 'html to put after the element',
 			'wysiwyg' => bool // only valid on textarea elements, will be ignored on all others
