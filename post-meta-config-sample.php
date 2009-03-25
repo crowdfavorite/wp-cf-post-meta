@@ -5,7 +5,7 @@
 $group[] = array(
 	'title' => 'Title for page block', // required
 	'description' => 'Description, inline elements',
-	'type' => array('page','post') // required, or just a string of 'page' or 'post'
+	'type' => array('page','post'), // required, or just a string of 'page' or 'post'
 	'id' => 'unique_id', // required
 	'add_to_sortables' => bool, // whether the group is added to the sortables array or not
 	'items' => array(
