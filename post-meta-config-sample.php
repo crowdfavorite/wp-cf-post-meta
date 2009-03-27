@@ -1,6 +1,11 @@
 <?php
 
 /* 
+* Filters:
+* apply_filters('cf_meta_config', $config);
+*/
+
+/*
 // Sample config item
 $group[] = array(
 	'title' => 'Title for page block', // required
