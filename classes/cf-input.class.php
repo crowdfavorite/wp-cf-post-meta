@@ -67,6 +67,7 @@
 		function cf_input_block($conf) {
 			// default to saving block data as a single entry
 			if(!isset($conf['process_group'])) { $conf['process_group'] = true; }
+			if(!isset($conf['name'])) { $conf['name'] = $conf['block_id']; }
 			$this->config = $conf;
 		}
 		
