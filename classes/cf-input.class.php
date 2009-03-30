@@ -119,7 +119,7 @@
 		function display() {
 			
 			// retrieve previously saved values
-			$data = get_post_meta($this->config['post_id'],$this->config['name'], true);
+			$data = apply_filters('cfinput_get_value',get_post_meta($this->config['post_id'],$this->config['name'], true),$this->config);
 			if ($data != '') {
 				$data = maybe_unserialize($data);
 			}
