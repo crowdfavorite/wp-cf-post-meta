@@ -365,7 +365,7 @@
 					$this->value = null; 
 				}
 			}
-			return $this->value;
+			return apply_filters('cfinput_get_value',$this->value,$this->config);
 		}
 	
 		/**
