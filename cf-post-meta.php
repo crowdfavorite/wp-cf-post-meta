@@ -53,7 +53,13 @@ Author URI: http://crowdfavorite.com
 				'type' => 'page_parent',
 				'comparison' => '==',
 				'value' => '2'
-			)			
+			),
+			// we can also target any custom elements that we've added to the page or that are non-standard WP elements
+			array(
+				'type' => '#id_of_element',
+				'comparison' => '==',
+				'value' => 'value_to_check'
+			)		
 		);
 		'callback' => '! not-implemented !'
 	);

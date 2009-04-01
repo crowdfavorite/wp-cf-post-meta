@@ -103,7 +103,10 @@ class cf_meta_js extends cf_meta {
 		foreach($this->conditions as $id => $set) {
 			if(is_array($set)) {
 				$ret = $this->do_set($set,$id.'_container');
-				if($ret != false) { $output .= $ret; }
+				if(!$ret) { 
+					return false;
+				}
+				$output .= $ret;
 			}
 		}
 //echo '<pre>'.htmlentities($output).'</pre>';
@@ -149,6 +152,11 @@ class cf_meta_js extends cf_meta {
 		// build toggle function 
 		$toggle = $this->build_toggle_func($method,$id,$set);
 		
+		// don't proceed if we encountered an error in processing
+		if($comparison == false || $toggle == false) { 
+			return false; 
+		}
+		
 		// start output with an identifier and comparision function
 		$output = '		// CF-Meta Dynamic JS for #'.$id.$comparison;
 		
@@ -156,11 +164,15 @@ class cf_meta_js extends cf_meta {
 		foreach($set as $cond) {
 			$func = $cond['type'];
 			if(method_exists($this,$func)) {
-				$output .= '
-		jQuery("#'.$this->$func(true).'").change(function(){
+				$identifier = '#'.$this->$func(true);
+			}
+			else {
+				$identifier = $func;
+			}
+			$output .= '
+		jQuery("'.$identifier.'").change(function(){
 			'.$toggle.'();
 		});'.PHP_EOL;
-			}
 		}
 		return $output.PHP_EOL;
 	}
@@ -179,7 +191,10 @@ class cf_meta_js extends cf_meta {
 		$items = array();
 		foreach($set as $cond) {
 			$ret = $this->build_comparison($cond,true);
-			if($ret != false) { $items[] = $ret; }
+			if(!$ret) { 
+				return false; 
+			}
+			$items[] = $ret;
 		}
 		$comparison = '
 		if('.implode(' '.$this->inverted[$method].' ',$items).') {
@@ -209,7 +224,10 @@ class cf_meta_js extends cf_meta {
 		$items = array();
 		foreach($set as $cond) {
 			$ret = $this->build_comparison($cond);
-			if($ret != false) { $items[] = $ret; }
+			if(!$ret) { 
+				return false; 
+			}
+			$items[] = $ret; 
 		}
 
 		// page load comparison function for this set
@@ -244,80 +262,103 @@ class cf_meta_js extends cf_meta {
 
 		// only operate if we know how to address the target element's value
 		$func = $cond['type'];
+		$jquery = false;
 		if(method_exists($this,$func)) {
-			$method = $invert ? $this->inverted[$cond['method']] : $cond['method'];
-			unset($cond['method']);
-			
-			if(is_array($cond['value'])) {
-				// multi-condition given and multi-value comparison given
-				$ret = array();
-				foreach($cond['value'] as $value) {
-					$ret[] = $this->$func().' '.($invert ? '!' : '').$cond['comparison'].' "'.$value.'"';
-				}
-				return is_array($ret) ? '('.implode(' '.$method.' ',$ret).')' : null;
-			}
-			else {
-				// single comparison value given, single return
-				return $this->$func().' '.($invert ? '!' : '').$cond['comparison'].' "'.$cond['value'].'"';
-			}
+			$jquery = $this->$func();
 		}
-		return false;
+		else {
+			$jquery = $this->generic_func($func);
+		}
+		if(!$jquery) { return false; }
+		
+		// build the comparison
+		$method = $invert ? $this->inverted[$cond['method']] : $cond['method'];
+		unset($cond['method']);
+		
+		if(is_array($cond['value'])) {
+			// multi-condition given and multi-value comparison given
+			$ret = array();
+			foreach($cond['value'] as $value) {
+				$ret[] = $jquery.' '.($invert ? '!' : '').$cond['comparison'].' "'.$value.'"';
+			}
+			return is_array($ret) ? '('.implode(' '.$method.' ',$ret).')' : null;
+		}
+		else {
+			// single comparison value given, single return
+			return $jquery.' '.($invert ? '!' : '').$cond['comparison'].' "'.$cond['value'].'"';
+		}
 	}
 	
 	/**
-	 * Returns id and/or javascript for targeting the page_template value
+	 * We've been given an ID, use it to build a generic jQuery func call
 	 *
-	 * @param bool $id_only 
+	 * @param string $func 
 	 * @return string
 	 */
-	function page_template($id_only=false) {
-		$id = 'page_template';
-		if($id_only) {
-			return $id;
-		}
-		return 'jQuery("#'.$id.' option:selected").val()';
-	}
-
-	/**
-	 * Returns id and/or javascript for targeting the page_parent value
-	 *
-	 * @param bool $id_only 
-	 * @return string
-	 */
-	function page_parent($id_only=false) {
-		$id = 'parent_id';
-		if($id_only) {
-			return $id;
-		}
-		return 'jQuery("#'.$id.' option:selected").val()';
+	function generic_func($identifier) {
+		return 'jQuery("'.$identifier.'").val()';
 	}
 	
 	/**
-	 * Returns id and/or javascript for targeting the post_status value
-	 *
-	 * @param bool $id_only 
-	 * @return string
+	 * The following functions target specific WordPress Admin UI elements.
+	 * WordPress elements are targeted specifically so that any upgrades to
+	 * the WP UI are easily managed.
 	 */
-	function post_status($id_only=false) {
-		$id = 'post_status';
-		if($id_only) {
-			return $id;
+	
+		/**
+		 * Returns id and/or javascript for targeting the page_template value
+		 *
+		 * @param bool $id_only 
+		 * @return string
+		 */
+		function page_template($id_only=false) {
+			$id = 'page_template';
+			if($id_only) {
+				return $id;
+			}
+			return 'jQuery("#'.$id.' option:selected").val()';
 		}
-		return 'jQuery("#'.$id.' option:selected").val()';
-	}
 
-	/**
-	 * Returns id and/or javascript for targeting the category value
-	 *
-	 * @param bool $id_only 
-	 * @return string
-	 */	
-	function category($id_only=false) {
-		if($id_only) {
-			return $id;
+		/**
+		 * Returns id and/or javascript for targeting the page_parent value
+		 *
+		 * @param bool $id_only 
+		 * @return string
+		 */
+		function page_parent($id_only=false) {
+			$id = 'parent_id';
+			if($id_only) {
+				return $id;
+			}
+			return 'jQuery("#'.$id.' option:selected").val()';
 		}
-		return '//category stub';
-	}
+	
+		/**
+		 * Returns id and/or javascript for targeting the post_status value
+		 *
+		 * @param bool $id_only 
+		 * @return string
+		 */
+		function post_status($id_only=false) {
+			$id = 'post_status';
+			if($id_only) {
+				return $id;
+			}
+			return 'jQuery("#'.$id.' option:selected").val()';
+		}
+
+		/**
+		 * Returns id and/or javascript for targeting the category value
+		 *
+		 * @param bool $id_only 
+		 * @return string
+		 */	
+		function category($id_only=false) {
+			if($id_only) {
+				return $id;
+			}
+			return '//category stub';
+		}
 
 	/**
 	 * Check to see if an item has any JS conditionals for its display
