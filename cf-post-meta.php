@@ -3,13 +3,12 @@
 Plugin Name: CF Post Meta
 Plugin URI: http://crowdfavorite.com/wordpress/
 Description: CrowdFavorite Post Metadata Manager: Facilitates adding additinal metadata fields to posts through the standard post entry interface. 
-Version: 1.5.1
+Version: 1.6
 Author: Crowd Favorite
 Author URI: http://crowdfavorite.com
 */	
 /* Tested back to PHP 4.4.7 & up to PHP 5.2.8 */
 
- 
 // Sample config item
 
 	/*
@@ -42,6 +41,20 @@ Author URI: http://crowdfavorite.com
 				'process_group' => true // save the entire group as a serialized array, not yet implemented
 			)
 		),
+		,'condition' => array(
+			'method' => '||', 	// optional, but required if multiple conditions are used. Possible values: ||, &&, >, <, <=, >=
+			array(
+				'type' => 'page_template',					// possible values: page_template, post_status, page_parent
+				'comparison' => '==', 						// any of the operators listed above
+				'value' => array('two-column.php','2'),		// string or array, values to check match against
+				'method' => '&&'							// matching method. optional, required if 'value' is an array
+			),
+			array(
+				'type' => 'page_parent',
+				'comparison' => '==',
+				'value' => '2'
+			)			
+		);
 		'callback' => '! not-implemented !'
 	);
 	*/
@@ -49,7 +62,7 @@ Author URI: http://crowdfavorite.com
 	/**
 	 * Plugin version ID
 	 */
-	define('CF_META_VERSION', '1.5.1');
+	define('CF_META_VERSION', '1.6');
 	
 	// PHP < 4.4 hax
 	if(!defined('PHP_EOL')) { define('PHP_EOL',"\n"); }
@@ -71,6 +84,8 @@ Author URI: http://crowdfavorite.com
 	 */
 	require_once(ABSPATH.PLUGINDIR.'/cf-post-meta/classes/cf-input.class.php');
 	require_once(ABSPATH.PLUGINDIR.'/cf-post-meta/classes/cf-meta.class.php');
+	require_once(ABSPATH.PLUGINDIR.'/cf-post-meta/classes/cf-meta-js.class.php');
+	require_once(ABSPATH.PLUGINDIR.'/cf-post-meta/classes/cf-meta-types.class.php');
 	
 	/**
 	 * assign post actions
