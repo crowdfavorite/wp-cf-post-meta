@@ -442,7 +442,9 @@
 	class cf_input_textarea extends cf_input  {
 		var $cols = 40;
 		var $rows = 1;
-		function cf_input_text($conf) {
+		function cf_input_textarea($conf) {
+			if(isset($conf['cols'])) { $this->cols = $conf['cols']; }
+			if(isset($conf['rows'])) { $this->rows = $conf['rows']; }
 			return cf_input::cf_input($conf);
 		}	
 	
