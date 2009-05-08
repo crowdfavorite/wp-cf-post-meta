@@ -426,6 +426,22 @@
 			return cf_input::cf_input($conf);
 		}
 	}
+	
+	/**
+	 * Hidden Input
+	 */
+	class cf_input_hidden extends cf_input {
+		function cf_input_hidden($conf) {
+			return cf_input::cf_input($conf);
+		}
+		
+		/**
+		 * hidden inputs will always use the given value in the config
+		 */
+		function get_value() {
+			return apply_filters('cfinput_get_value',$this->config['value'],$this->config);
+		}
+	}
 
 	/**
 	 * Password input - no overrides
