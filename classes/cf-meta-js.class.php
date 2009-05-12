@@ -198,7 +198,6 @@ class cf_meta_js extends cf_meta {
 		}
 		$comparison = '
 		if('.implode(' '.$this->inverted[$method].' ',$items).') {
-			console.log("hiding '.$id.'");
 			jQuery("#'.$id.'").hide();
 		}
 		jQuery(".metabox-prefs label[for='.$id.'-hide]").hide();
