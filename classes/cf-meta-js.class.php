@@ -1,6 +1,28 @@
 <?php
 
 /**
+ * Manipulate the user prefs to always show our manipulated boxes, otherwise
+ * a user can destroy the functionality of this plugin's show/hide conditionals.
+ *
+ * @param array $prefs 
+ * @param string $option 
+ * @param ing $user 
+ * @return array - modified user prefs
+ */
+function cf_meta_metaboxclear($prefs,$option,$user) {
+	global $cfmeta,$post;
+	$cfmeta = cf_meta_gimme(cf_meta_get_type(),$post->ID);
+	foreach($prefs as $k => $v) {
+		if(array_key_exists(str_replace('_container','',$v), $cfmeta->conditions)) {
+			unset($prefs[$k]);
+		}
+	}
+	return $prefs;
+}
+add_filter('get_user_option_metaboxhidden_page','cf_meta_metaboxclear',10,3);
+add_filter('get_user_option_metaboxhidden_page','cf_meta_metaboxclear',10,3);
+
+/**
  * Process a config array in to JS conditionals for toggling
  * the display of items on the page based on the page state
  * Required by cf_meta to function
