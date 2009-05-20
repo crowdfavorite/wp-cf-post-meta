@@ -1,18 +1,21 @@
 # CF-Post-Meta Changelog
 
+## 1.6.2 
+- Suppress PHP warning message
+
 ## 1.6.1 
-	- deprecate `save_as_block` option for repeater elements. Repeater elements always save as block groups. Default is true.
-	- Add README & CHANGELOG files to plugin
-	- removed sample config file & config example in favor of README.txt
+- deprecate `save_as_block` option for repeater elements. Repeater elements always save as block groups. Default is true.
+- Add README & CHANGELOG files to plugin
+- removed sample config file & config example in favor of README.txt
 
 ## 1.6 
-	- Adds support for conditional display of meta boxes. 
-	- Meta boxes can be shown or hidden based on a few different values in the page/post edit interface.
+- Adds support for conditional display of meta boxes. 
+- Meta boxes can be shown or hidden based on a few different values in the page/post edit interface.
 	
 ## 1.5 
-	- Adds support for repeater elements. 
-	- Fixes compatability issue with PHP < 4.4
+- Adds support for repeater elements. 
+- Fixes compatability issue with PHP < 4.4
 
 ## 1.0 
-	- Initial release
-	- Allows the addition of meta boxes to the WordPress page/post edit screen via a simple configuration file or filter.
+- Initial release
+- Allows the addition of meta boxes to the WordPress page/post edit screen via a simple configuration file or filter.
