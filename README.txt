@@ -232,3 +232,44 @@ The Post Meta plugin allows for the conditional display of Meta Boxes based on t
 		return $config;
 	}
 	add_filter('cf_meta_config','my_add_metabox');
+
+## Advanced example of conditional with an arbitrary jQuery selector
+
+
+The Post Meta plugin can match arbitrary elements in the DOM, allowing access to all elements displayed in the WordPress admin UI in the page and post editors.  The example below shows conditional display of Meta Boxes based on the status of check boxes (Categories in this case).  
+
+**Example:**
+	/**
+	 * Conditional box display based on categories
+	 * Display meta box for the 'Featured Article' category
+	 * @param array $config
+	 * @return array
+	 */
+	function my_add_metabox($config) {
+	// Simple comparison check
+	$feature_cat_id = get_cat_ID('Featured Article');
+	$config[] = array(
+					  'title' => 'Featured Article',
+					  'description' => 'Fields available for Featured Articles',
+					  'type' => array('post'),
+					  'id' => 'abcd-feature-article-fields',
+					  'add_to_sortables' => true,
+					  'items' => array(
+									   array(
+											 'name' => '_feature_sub_head',
+											 'label' => 'Sub Headline',
+											 'type' => 'text'
+											 )
+									   ),
+					  'condition' => array(
+										   array(
+												 'type' => '#in-category-' . $feature_cat_id . ':checked',
+												 'comparison' => '==',
+												 'bind-change' => '#in-category-'. $feature_cat_id, // optional; element to bind the change event
+												 'value' => $feature_cat_id
+												 )
+										   )
+					  );
+	
+	return $config;
+}

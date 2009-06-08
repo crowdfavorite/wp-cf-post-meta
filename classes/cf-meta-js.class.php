@@ -191,7 +191,11 @@ class cf_meta_js extends cf_meta {
 				$identifier = '#'.$this->$func(true);
 			}
 			else {
-				$identifier = $func;
+				if (isset($cond['bind-change'])) {
+					$identifier = $cond['bind-change'];
+				} else {
+					$identifier = $func;
+				}
 			}
 			$output .= '
 		jQuery("'.$identifier.'").change(function(){
