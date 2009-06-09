@@ -93,11 +93,15 @@
 				$item_data = (isset($data['items']) && isset($data['items'][$item['name']]) ? $data['items'][$item['name']] : array());
 
 				// override item name and prefix
+				$item['key_name'] = $this->config['name'];
+				$item['item_name'] = $item['name'];
+				$item['item_index'] = $data['index'];
 				$item['name'] = 'blocks['.$this->config['name'].']['.$data['index'].']['.$item['name'].']';
 				$item['prefix'] = $this->set['prefix'];
 				
 				if(class_exists('cf_input_'.$item['type'])) {
 					$type = 'cf_input_'.$item['type'];
+					$item['post_id'] = $this->config['post_id'];
 					$item = new $type($item);
 				}
 				else { continue; }
@@ -136,12 +140,13 @@
 				// if we have data then we need to display it first
 				if (!empty($data)) {
 					foreach ($data as $index => $each) {
-						$html .= $this->make_block_item(array('index' => ++$index, 'items' => $each));
+						
+						$html .= $this->make_block_item(array('index' => $index++, 'items' => $each));
 					}
 				}
 				// else we can just display an empty set 
 				else {
-					$html .= $this->make_block_item(array('index' => 1));
+					$html .= $this->make_block_item(array('index' => 0));
 				}
 			}
 			$html .= '</div>'; // this is the end of the .insert_container div
@@ -240,6 +245,7 @@
 		function cf_input($conf) {
 			// require name
 			if(!isset($conf['name'])) { return false; }
+			if(!isset($conf['key_name'])) { $conf['key_name'] = $conf['name']; }
 			// are we required?
 			if(isset($conf['required'])) { 
 				$this->config['required'] = $conf['required'];
@@ -323,6 +329,7 @@
 		function get_input($value=false) {
 			$value = ($value) ? $value : $this->get_value();
 			$class = isset($this->config['label']) ? null : 'class="full" ';
+
 			return '<input type="'.$this->config['type'].'" name="'.$this->get_id().'" id="'.$this->get_id().'" value="'.htmlspecialchars($value).'" '.$class.'/>';
 		}
 	
@@ -357,7 +364,13 @@
 		 */
 		function get_value() {
 			if(!$this->value) {
-				$value = get_post_meta($this->post_id,$this->config['name'],true);
+
+				$value = get_post_meta($this->post_id,$this->config['key_name'],true);
+
+				if (isset($this->config['item_name'])) {
+					$value = $value[$this->config['item_index']][$this->config['item_name']];
+				}
+
 				if(!empty($value)) { 
 					$this->value = $value; 
 				}
@@ -458,6 +471,7 @@
 	class cf_input_textarea extends cf_input  {
 		var $cols = 40;
 		var $rows = 1;
+		
 		function cf_input_textarea($conf) {
 			if(isset($conf['cols'])) { $this->cols = $conf['cols']; }
 			if(isset($conf['rows'])) { $this->rows = $conf['rows']; }
@@ -488,6 +502,7 @@
 				$after = '</div></div>
 						   <div style="clear:both">&nbsp;</div>';
 			}
+			
 			return $before.'<textarea name="'.$this->get_name().'" id="'.$this->get_id().'" cols="'.$this->cols.'" rows="'.$this->rows.'">'.
 				   htmlspecialchars($this->get_value()).'</textarea>'.$after;
 		}	
