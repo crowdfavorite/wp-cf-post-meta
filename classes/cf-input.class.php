@@ -276,17 +276,6 @@
 
 				// write to db
 				return $this->save_data($_POST[$this->get_name()]);
-			} else if (isset($_POST[$this->get_basename()]) && is_array($_POST[$this->get_basename()])) {
-				// check required
-				if($_POST[$this->get_basename()] == '' && $this->required) {
-					$this->error = 'required';
-					return false;
-				}
-
-				// do validation here
-
-				// write to db
-				return $this->save_data_array($_POST[$this->get_basename()]);
 			} else {
 				delete_post_meta($this->post_id,$this->get_name());
 			}
@@ -308,20 +297,6 @@
 		}
 		
 		/**
-		 * Save an HTML element array
-		 * ex: element_name[first]
-		 */
-		function save_data_array($value) {
-			// delete meta entry on empty value
-			if($value == '') { 
-				return delete_post_meta($this->post_id,$this->strip_prefix($this->get_basename())); 
-			}
-			else { 
-				return update_post_meta($this->post_id,$this->strip_prefix($this->get_basename()),$value); 
-			}
-		}
-		
-		/**
 		 * Do data validation
 		 */
 		function validate_data() {
@@ -335,22 +310,6 @@
 			return $this->config['prefix'].$this->config['name'];
 		}
 	
-		/**
-		 * this is necessary for elements with HTML arrays for names
-		 *  (ex: field_name[first]) 
-		 */
-		function get_basename() {
-			$bracket_pos = strpos($this->config['name'], '[');
-			$basename = substr($this->config['name'], 0, $bracket_pos);
-			return $this->config['prefix'].$basename;
-		}
-		
-		/**
-		 * removes prefix for name
-		 */
-		function strip_prefix($name) {
-			return substr($name, strlen($this->config['prefix']));
-		}
 		/**
 		 * id and name can be the same
 		 */
