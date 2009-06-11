@@ -109,7 +109,7 @@ class cf_meta {
 	function show_set_contents($box) {
 		// add in a quick little hook we can look for at post processing time
 		echo '
-			<input type="hidden" name="cf_meta_type" value="'.$this->type.'" />
+			<input type="hidden" name="cf_meta_active" value="1" />
 		';			
 		$id = str_replace($this->prefix,'',str_replace('_container','',$box['id']));
 		$set = new cf_input_set($this->config[$id]);
@@ -132,12 +132,14 @@ class cf_meta {
 					if(!class_exists('cf_input_'.$item['type'])) { continue; }
 					$item['prefix'] = $this->prefix;
 					$type = 'cf_input_'.$item['type'];
+					
 					$item = new $type($item); 
 					
 					if(!$item->save()) {
 						// process errors
 						if($item->error) {
-						
+							$item_save_error = "<h5 style=\"color:brown\">error on $item->save</h5>";
+							die($item_save_error);
 						}
 					}
 				}

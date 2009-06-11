@@ -279,7 +279,6 @@
 			} else {
 				delete_post_meta($this->post_id,$this->get_name());
 			}
-			
 			return false;
 		}
 		
@@ -368,6 +367,7 @@
 				$value = get_post_meta($this->post_id,$this->config['key_name'],true);
 
 				if (isset($this->config['item_name'])) {
+				
 					$value = $value[$this->config['item_index']][$this->config['item_name']];
 				}
 

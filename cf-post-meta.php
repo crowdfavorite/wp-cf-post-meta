@@ -37,21 +37,29 @@ Author URI: http://crowdfavorite.com
 	require_once(ABSPATH.PLUGINDIR.'/cf-post-meta/classes/cf-meta-js.class.php');
 	require_once(ABSPATH.PLUGINDIR.'/cf-post-meta/classes/cf-meta-types.class.php');
 	
-	/**
-	 * assign post actions
-	 */
-	if(is_admin() && cf_meta_get_type() !== false) {
-		add_action('admin_head','cf_meta_add_boxes',11);
-		add_action('save_post','cf_meta_save_post',10,2);
-		if(isset($_GET['cfm_error']) || isset($_GET['cfm_notice'])) {
-			add_action('admin_notices','cf_meta_notices');
-		}
+	function cf_meta_actions() {
 		/**
-		 * Include necessary CSS
+		 * assign post actions
 		 */
-		add_action('admin_head','cf_meta_head_items',10);
+		if (apply_filters('cf_meta_actions', false)) {
+			add_action('admin_head','cf_meta_add_boxes',11);
+			add_action('save_post','cf_meta_save_post',10,2);
+			if (isset($_GET['cfm_error']) || isset($_GET['cfm_notice'])) {
+				add_action('admin_notices','cf_meta_notices');
+			}
+			/**
+			 * Include necessary CSS
+			 */
+			add_action('admin_head','cf_meta_head_items',10);
+		}
 	}
-			
+	add_action('init', 'cf_meta_actions');
+	
+	function cf_meta_default_actions($val) {
+		return (is_admin() && cf_meta_get_type() !== false);
+	}
+	add_filter('cf_meta_actions', 'cf_meta_default_actions', 1);
+	
 	/**
 	 * Run in the appropriate context
 	 */
@@ -118,15 +126,17 @@ Author URI: http://crowdfavorite.com
 	 * @param object $post - post data object
 	 */
 	function cf_meta_save_post($post_id,$post) {
-		if(isset($_POST['cf_meta_type'])) {
-			if($post->post_type == 'revision') { return; }
-			if($_POST['cf_meta_type'] == 'page') {
-				$cfmeta = cf_meta_gimme('page',$post->ID);
+		
+		if ($_POST['cf_meta_active']) {
+			switch ($post->post_type) {
+				case 'revision':
+					return;
+					break;
+				case 'page':
+				case 'post':
+					$cfmeta = cf_meta_gimme($post->post_type, $post->ID);
+					break;
 			}
-			elseif($_POST['cf_meta_type'] == 'post') {
-				$cfmeta = cf_meta_gimme('post',$post->ID);
-			}
-			// process
 			$cfmeta->save();
 		}
 	}
