@@ -366,9 +366,23 @@
 
 				$value = get_post_meta($this->post_id,$this->config['key_name'],true);
 
-				if (isset($this->config['item_name'])) {
-				
-					$value = $value[$this->config['item_index']][$this->config['item_name']];
+				// if we're a repeater element we need to fish out our individual value
+				if (isset($this->config['item_index']) && isset($this->config['item_name'])) {
+					// make sure we have an array to work with
+					if (!is_array($value) && empty($value)) {
+						$value = array();
+					}
+					else {
+						// what do we do if we find a value?
+					}
+
+					// get the value or assign to empty				
+					if (isset($value[$this->config['item_index']][$this->config['item_name']])){
+						$value = $value[$this->config['item_index']][$this->config['item_name']];
+					}
+					else {
+						$value = '';
+					}
 				}
 
 				if(!empty($value)) { 
