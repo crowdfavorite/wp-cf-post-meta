@@ -526,6 +526,15 @@
 		function cf_input_text($conf) {
 			return cf_input::cf_input($conf);
 		}
+		function get_input() {
+			if (is_array($this->config['options']) && count($this->config['options'])) {
+				foreach ($this->config['options'] as $k => $v) {
+					$k == $this->get_value() ? $checked = ' checked="checked"' : $checked = '';
+					$output .= '<input name="'.$this->get_name().'"id="'.$this->get_id().'" value="'.$k.'"'.$checked.' /> '.$v;
+				}
+			}
+			return $output;
+		}
 	}
 
 	class cf_input_checkbox extends cf_input {
