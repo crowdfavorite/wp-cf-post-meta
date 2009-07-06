@@ -527,10 +527,11 @@
 			return cf_input::cf_input($conf);
 		}
 		function get_input() {
+			$output = '';
 			if (is_array($this->config['options']) && count($this->config['options'])) {
 				foreach ($this->config['options'] as $k => $v) {
 					$k == $this->get_value() ? $checked = ' checked="checked"' : $checked = '';
-					$output .= '<input name="'.$this->get_name().'"id="'.$this->get_id().'" value="'.$k.'"'.$checked.' /> '.$v;
+					$output .= '<input type="radio" name="'.$this->get_name().'"id="'.$this->get_id().'" value="'.$k.'"'.$checked.' /> '.$v;
 				}
 			}
 			return $output;
