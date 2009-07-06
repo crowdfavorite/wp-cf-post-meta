@@ -76,8 +76,11 @@ Adding a meta box to the wordpress page/post edit screen requires little code.
 					'name' => '_unique_meta_value',
 					'type' => 'radio',
 					'label' => 'Radio',
-					'label_position' => 'after',
-					'default_value' => 'val'				// required for checkboxes, element value
+					'options' => array(
+						'key1' => 'value1',
+						'key2' => 'value2',
+						'key3' => 'value3'
+					),
 				),
 				// password input
 				array(
