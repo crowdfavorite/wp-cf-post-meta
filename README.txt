@@ -30,6 +30,7 @@ Adding a meta box to the wordpress page/post edit screen requires little code.
 			'type' => array('post'), 	// required, Which edit screen to add to. Use array('page','post') to add to both at the same time
 			'id' => 'unique-id', 		// required, unique id for the Meta Box
 			'add_to_sortables' => true,	// optional, this is the default behavior
+			'context' => 'normal'		// optional, sets the location of the metabox in the edit page.  Other posibilites are 'advanced' or 'side' (this sets the meta box to apear in the rt sidebar of the edit page)
 			'items' => array(
 				// text input
 				array(
@@ -218,7 +219,7 @@ The Post Meta plugin allows for the conditional display of Meta Boxes based on t
 				)
 			),
 			'condition' => array( // complex comparison
-				'method' => '&&', // comparison operator to apply to the following conditions
+				'method' = '&&', // comparison operator to apply to the following conditions
 				array(
 					'type' => 'page_template',
 					'comparison' => '==',
