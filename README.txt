@@ -219,7 +219,7 @@ The Post Meta plugin allows for the conditional display of Meta Boxes based on t
 				)
 			),
 			'condition' => array( // complex comparison
-				'method' = '&&', // comparison operator to apply to the following conditions
+				'method' => '&&', // comparison operator to apply to the following conditions
 				array(
 					'type' => 'page_template',
 					'comparison' => '==',
@@ -228,7 +228,7 @@ The Post Meta plugin allows for the conditional display of Meta Boxes based on t
 				array(
 					'type' => 'page_parent',
 					'comparison' => '!=',
-					'22'
+					'value' => '22'
 				)
 			)
 		);
