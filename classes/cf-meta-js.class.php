@@ -12,7 +12,7 @@
 function cf_meta_metaboxclear($prefs,$option,$user) {
 	global $cfmeta,$post;
 	$cfmeta = cf_meta_gimme(cf_meta_get_type(),$post->ID);
-	if (isset($cfmeta->conditions) && is_array($cfmeta->conditions)) {
+	if (isset($cfmeta->conditions) && is_array($cfmeta->conditions) && count($cfmeta->conditions)) {
 		foreach($prefs as $k => $v) {
 			if (array_key_exists(str_replace('_container','',$v), $cfmeta->conditions)) {
 				unset($prefs[$k]);
