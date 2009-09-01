@@ -109,7 +109,7 @@
 				$html .= $item->display($item_data);
 			}
 			
-			$html .= '<a href="#" onclick="delete'.$this->config['name'].'(jQuery(this).parent()); return false;" class="delete">Delete</a>'.
+			$html .= '<a href="#" onclick="delete'.$this->config['name'].'(jQuery(this).parent()); return false;" class="icon delete">Delete</a>'.
 					 '</div>'.
 					 '</fieldset>';
 			
