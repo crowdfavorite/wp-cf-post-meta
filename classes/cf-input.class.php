@@ -160,7 +160,7 @@
 							next_element_index = Number(last_element_index[1])+1;
 						} else {
 							next_element_index = 1;
-						}
+						};
 						insert_element = \''.str_replace(PHP_EOL,'',trim($this->make_block_item())).'\';
 						insert_element = insert_element.replace(/'.$this->repeater_index_placeholder.'/g, next_element_index);
 						jQuery(insert_element).appendTo(\'#'.$this->config['name'].'\');
