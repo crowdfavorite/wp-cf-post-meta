@@ -460,6 +460,11 @@ class cf_meta_js extends cf_meta {
 	 *		- setting mode:"exact", not sure of the repricussions yet
 	 */
 	function add_wysiwyg() {
+		include_once(ABSPATH . WPINC . '/js/tinymce/langs/wp-langs.php');		
+		$baseurl = includes_url('js/tinymce');
+		$version = apply_filters('tiny_mce_version', '');
+		$version = 'ver=' . $tinymce_version . $version;
+		echo "<script type='text/javascript' src='$baseurl/tiny_mce.js?$version'></script>\n";
 		echo '
 <script type="text/javascript">
 //<![CDATA[
@@ -477,7 +482,7 @@ class cf_meta_js extends cf_meta {
 		theme_advanced_buttons2:"", 
 		theme_advanced_buttons3:"", 
 		theme_advanced_buttons4:"", 
-		language:"en", 
+		language:"wp-langs-en", 
 		spellchecker_languages:"+English=en,Danish=da,Dutch=nl,Finnish=fi,French=fr,German=de,Italian=it,Polish=pl,Portuguese=pt,Spanish=es,Swedish=sv", 
 		theme_advanced_toolbar_location:"top", 
 		theme_advanced_toolbar_align:"left", 
@@ -497,7 +502,6 @@ class cf_meta_js extends cf_meta {
 		entities:"38,amp,60,lt,62,gt", 
 		accessibility_focus:"1", 
 		tab_focus:":prev,:next", 
-		content_css:"'.get_bloginfo('wpurl').'/wp-includes/js/tinymce/wordpress.css", 
 		save_callback:"", 
 		wpeditimage_disable_captions:"", 
 		plugins:"safari,inlinepopups,spellchecker,paste"

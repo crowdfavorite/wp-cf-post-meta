@@ -517,7 +517,7 @@
 						   <div style="clear:both">&nbsp;</div>';
 			}
 			
-			return $before.'<textarea name="'.$this->get_name().'" id="'.$this->get_id().'" cols="'.$this->cols.'" rows="'.$this->rows.'">'.
+			return $before.'<textarea name="'.$this->get_name().'" id="'.$this->get_id().'" cols="'.$this->cols.'" rows="'.$this->rows.'" class="cf_tiny_mce">'.
 				   htmlspecialchars($this->get_value()).'</textarea>'.$after;
 		}	
 	}
