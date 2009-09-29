@@ -121,25 +121,27 @@ class cf_meta {
 	 */
 	function save() {
 		// loop through sets
-		foreach($this->config as $set) {
-			// process each input in a set
-			foreach($set['items'] as $item) {
-				if($item['type'] == 'block') {
-					$block = new cf_input_block($item);
-					$block->save();
-				}
-				else {
-					if(!class_exists('cf_input_'.$item['type'])) { continue; }
-					$item['prefix'] = $this->prefix;
-					$type = 'cf_input_'.$item['type'];
-					
-					$item = new $type($item); 
-					
-					if(!$item->save()) {
-						// process errors
-						if($item->error) {
-							$item_save_error = "<h5 style=\"color:brown\">error on $item->save</h5>";
-							die($item_save_error);
+		$config = apply_filters('cf_meta_save_config', $this->config);
+		if (count($config)) {
+			foreach ($config as $set) {
+				// process each input in a set
+				foreach ($set['items'] as $item) {
+					if ($item['type'] == 'block') {
+						$block = new cf_input_block($item);
+						$block->save();
+					}
+					else {
+						if (!class_exists('cf_input_'.$item['type'])) { continue; }
+						$item['prefix'] = $this->prefix;
+						$type = 'cf_input_'.$item['type'];
+						
+						$item = new $type($item); 
+						if (!$item->save()) {
+							// process errors
+							if ($item->error) {
+								$item_save_error = "<h5 style=\"color:brown\">error on $item->save</h5>";
+								die($item_save_error);
+							}
 						}
 					}
 				}
