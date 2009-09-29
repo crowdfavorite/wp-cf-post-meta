@@ -207,6 +207,7 @@
 		 * If all values for a block item are null then the item is not saved
 		 */
 		function save_group($post) {
+			$save_array = array();
 			if (isset($post['blocks'][$this->config['name']])) {
 				foreach ($post['blocks'][$this->config['name']] as $value) {
 					// keep items where all values are empty from being saved
@@ -216,6 +217,9 @@
 						$save_array[] = $value;
 					}
 				}
+				$save_array = apply_filters('cfinput_save_group', $save_array, $this->config['name'], $this->config);
+			}
+			if (count($save_array)) {
 				return update_post_meta($this->config['post_id'],$this->config['name'],$save_array); 
 			}
 			else {
@@ -286,6 +290,7 @@
 		 * Do save action
 		 */
 		function save_data($value) {
+			$value = apply_filters('cfinput_save_data', $value, $this->config['name'], $this->config);
 			// delete meta entry on empty value
 			if($value == '') { 
 				return delete_post_meta($this->post_id,$this->config['name']); 
