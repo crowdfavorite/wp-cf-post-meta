@@ -109,9 +109,16 @@ class cf_meta_js extends cf_meta {
 	 * Extend the display function to dump the JS to page
 	 */
 	function display() {
+		global $wp_version;
 		cf_meta::display();
 		if(is_array($this->wysiwyg_items)) {
-			$this->add_wysiwyg();
+			// Move JS to last item after admin footer scripts for WP 2.8+ compatability
+			if(version_compare($wp_version,'2.8', '>=')) {
+				add_action('admin_print_footer_scripts',array($this,'add_wysiwyg'),999);
+			}
+			else {
+				$this->add_wysiwyg();
+			}
 		}
 		if(is_array($this->conditions)) {
 			$this->display_conditions();
@@ -435,8 +442,8 @@ class cf_meta_js extends cf_meta {
 		
 		// enqueue script if necessary and return
 		if($enqueue) {
-			wp_enqueue_script('tiny_mce');
-			wp_enqueue_script('word-count');
+			//wp_enqueue_script('tiny_mce');
+			//wp_enqueue_script('word-count');
 			return true;
 		}
 		return false;
@@ -460,58 +467,56 @@ class cf_meta_js extends cf_meta {
 	 *		- setting mode:"exact", not sure of the repricussions yet
 	 */
 	function add_wysiwyg() {
-		include_once(ABSPATH . WPINC . '/js/tinymce/langs/wp-langs.php');		
-		$baseurl = includes_url('js/tinymce');
-		$version = apply_filters('tiny_mce_version', '');
-		$version = 'ver=' . $tinymce_version . $version;
-		echo "<script type='text/javascript' src='$baseurl/tiny_mce.js?$version'></script>\n";
 		echo '
 <script type="text/javascript">
-//<![CDATA[
 	// must init what we want and run before the WordPress onPageLoad function.
 	// After this function redo the WordPress init so the main editor picks up the WordPress config. 
 	// that is the only way I could get this to work.
-	tinyMCE.init({
-		mode:"exact",
-		elements:"'.implode(',',$this->wysiwyg_items).'", 
-		onpageload:"", 
-		width:"100%", 
-		theme:"advanced", 
-		skin:"wp_theme", 
-		theme_advanced_buttons1:"bold,italic,underline,|,bullist,numlist,blockquote,|,justifyleft,justifycenter,justifyright,|,link,unlink,|,charmap,spellchecker,code,wp_help", 
-		theme_advanced_buttons2:"", 
-		theme_advanced_buttons3:"", 
-		theme_advanced_buttons4:"", 
-		language:"wp-langs-en", 
-		spellchecker_languages:"+English=en,Danish=da,Dutch=nl,Finnish=fi,French=fr,German=de,Italian=it,Polish=pl,Portuguese=pt,Spanish=es,Swedish=sv", 
-		theme_advanced_toolbar_location:"top", 
-		theme_advanced_toolbar_align:"left", 
-		theme_advanced_statusbar_location:"", 
-		theme_advanced_resizing:"", 
-		theme_advanced_resize_horizontal:"", 
-		dialog_type:"modal", 
-		relative_urls:"", 
-		remove_script_host:"", 
-		convert_urls:"", 
-		apply_source_formatting:"", 
-		remove_linebreaks:"1", 
-		paste_convert_middot_lists:"1", 
-		paste_remove_spans:"1", 
-		paste_remove_styles:"1", 
-		gecko_spellcheck:"1", 
-		entities:"38,amp,60,lt,62,gt", 
-		accessibility_focus:"1", 
-		tab_focus:":prev,:next", 
-		save_callback:"", 
-		wpeditimage_disable_captions:"", 
-		plugins:"safari,inlinepopups,spellchecker,paste"
+	tinyMCE.init({ ';
+		// compress output whitespace a bit...
+		echo preg_replace('/(\n|\t)/','','
+			mode:"exact",
+			elements:"'.implode(',',$this->wysiwyg_items).'", 
+			onpageload:"", 
+			width:"100%", 
+			theme:"advanced", 
+			skin:"wp_theme", 
+			theme_advanced_buttons1:"bold,italic,underline,|,bullist,numlist,blockquote,|,justifyleft,justifycenter,justifyright,|,link,unlink,|,charmap,spellchecker,code,wp_help", 
+			theme_advanced_buttons2:"", 
+			theme_advanced_buttons3:"", 
+			theme_advanced_buttons4:"", 
+			language:"en", 
+			spellchecker_languages:"+English=en,Danish=da,Dutch=nl,Finnish=fi,French=fr,German=de,Italian=it,Polish=pl,Portuguese=pt,Spanish=es,Swedish=sv", 
+			theme_advanced_toolbar_location:"top", 
+			theme_advanced_toolbar_align:"left", 
+			theme_advanced_statusbar_location:"", 
+			theme_advanced_resizing:"", 
+			theme_advanced_resize_horizontal:"", 
+			dialog_type:"modal", 
+			relative_urls:"", 
+			remove_script_host:"", 
+			convert_urls:"", 
+			apply_source_formatting:"", 
+			remove_linebreaks:"1", 
+			paste_convert_middot_lists:"1", 
+			paste_remove_spans:"1", 
+			paste_remove_styles:"1", 
+			gecko_spellcheck:"1", 
+			entities:"38,amp,60,lt,62,gt", 
+			accessibility_focus:"1", 
+			tab_focus:":prev,:next", 
+			save_callback:"", 
+			wpeditimage_disable_captions:"", 
+			plugins:"safari,inlinepopups,spellchecker,paste"
+		');
+		
+		echo '
 	});
 
 	// redo the WordPress init, this is only needed on page and post edit screens
 	// to make sure that the main edit area is initialized properly. If you copy
 	// and paste this code for use in another spot then you do not need this next line
 	tinyMCE.init(tinyMCEPreInit.mceInit);
-//]]>
 </script>
 			';
 		return;
