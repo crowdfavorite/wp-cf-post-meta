@@ -1,5 +1,9 @@
 # CF-Post-Meta Changelog
 
+## 1.7.1
+- Adds filters
+- proper version #
+
 ## 1.7
 - Adds support for radio buttons
 
