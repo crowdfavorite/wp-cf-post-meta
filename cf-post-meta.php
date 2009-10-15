@@ -36,6 +36,7 @@ Author URI: http://crowdfavorite.com
 	require_once(ABSPATH.PLUGINDIR.'/cf-post-meta/classes/cf-meta.class.php');
 	require_once(ABSPATH.PLUGINDIR.'/cf-post-meta/classes/cf-meta-js.class.php');
 	require_once(ABSPATH.PLUGINDIR.'/cf-post-meta/classes/cf-meta-types.class.php');
+	require_once(ABSPATH.PLUGINDIR.'/cf-post-meta/classes/cf-input-settings-types.class.php');
 	
 	function cf_meta_actions() {
 		/**
