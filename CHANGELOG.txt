@@ -1,5 +1,9 @@
 # CF-Post-Meta Changelog
 
+## 1.8
+- Redifining plugin location, so that plugin can be utilized in MU-Plugins or Plugins directory
+- Displaying the "help" that we define in the settings config array.
+
 ## 1.7.1
 - Adds filters
 - proper version #
