@@ -509,14 +509,8 @@ class cf_meta_js extends cf_meta {
 			wpeditimage_disable_captions:"", 
 			plugins:"safari,inlinepopups,spellchecker,paste"
 		');
-		
 		echo '
 	});
-
-	// redo the WordPress init, this is only needed on page and post edit screens
-	// to make sure that the main edit area is initialized properly. If you copy
-	// and paste this code for use in another spot then you do not need this next line
-	// tinyMCE.init(tinyMCEPreInit.mceInit);
 </script>
 			';
 		return;
