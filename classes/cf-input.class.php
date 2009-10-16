@@ -128,7 +128,7 @@
 				$data = maybe_unserialize($data);
 			}
 			// kick off the repeater block with a wrapper div to contain everything
-			$html .= '<div class="block_wrapper">'; 
+			$html .= '<div class="block_wrapper">'.
 					 '<h4>'.
 					 (isset($this->config['block_label']) && !empty($this->config['block_label']) ? 'Group for '.$this->config['block_label'] : '&nbsp;').
 					 '</h4>';
