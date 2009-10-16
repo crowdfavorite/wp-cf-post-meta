@@ -3,7 +3,7 @@
 Plugin Name: CF Post Meta
 Plugin URI: http://crowdfavorite.com/wordpress/
 Description: CrowdFavorite Post Metadata Manager: Facilitates adding additinal metadata fields to posts through the standard post entry interface. 
-Version: 1.7.1
+Version: 1.8
 Author: Crowd Favorite
 Author URI: http://crowdfavorite.com
 */	
@@ -12,7 +12,7 @@ Author URI: http://crowdfavorite.com
 	/**
 	 * Plugin version ID
 	 */
-	define('CF_META_VERSION', '1.6.3');
+	define('CF_META_VERSION', '1.8');
 	
 	// PHP < 4.4 hax
 	if(!defined('PHP_EOL')) { define('PHP_EOL',"\n"); }
