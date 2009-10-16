@@ -98,7 +98,7 @@
 				$item['item_index'] = $data['index'];
 				$item['name'] = 'blocks['.$this->config['name'].']['.$data['index'].']['.$item['name'].']';
 				$item['prefix'] = $this->set['prefix'];
-				
+
 				if(class_exists('cf_input_'.$item['type'])) {
 					$type = 'cf_input_'.$item['type'];
 					$item['post_id'] = $this->config['post_id'];
@@ -354,7 +354,7 @@
 			elseif($this->config['label_position'] == 'after') {
 				$html .= $this->get_input().$this->get_label('after');
 			}
-			$html .= '</p>'.PHP_EOL;
+			$html .= ' '.$this->config['help'].'</p>'.PHP_EOL;
 			
 			if(isset($this->config['after'])) { 
 				$html .= $this->config['after'].PHP_EOL; 
