@@ -32,11 +32,14 @@ Author URI: http://crowdfavorite.com
 	/**
 	 * Get required files
 	 */
-	require_once(ABSPATH.PLUGINDIR.'/cf-post-meta/classes/cf-input.class.php');
-	require_once(ABSPATH.PLUGINDIR.'/cf-post-meta/classes/cf-meta.class.php');
-	require_once(ABSPATH.PLUGINDIR.'/cf-post-meta/classes/cf-meta-js.class.php');
-	require_once(ABSPATH.PLUGINDIR.'/cf-post-meta/classes/cf-meta-types.class.php');
-	require_once(ABSPATH.PLUGINDIR.'/cf-post-meta/classes/cf-input-settings-types.class.php');
+	/* Allow us to be in mu-plugins or plugins */
+	define('CF_META_PLUGIN_DIR', trailingslashit(dirname(realpath(__FILE__))));
+
+	require_once(CF_META_PLUGIN_DIR.'classes/cf-input.class.php');
+	require_once(CF_META_PLUGIN_DIR.'classes/cf-meta.class.php');
+	require_once(CF_META_PLUGIN_DIR.'classes/cf-meta-js.class.php');
+	require_once(CF_META_PLUGIN_DIR.'classes/cf-meta-types.class.php');
+	require_once(CF_META_PLUGIN_DIR.'classes/cf-input-settings-types.class.php');
 	
 	function cf_meta_actions() {
 		/**
@@ -191,7 +194,7 @@ Author URI: http://crowdfavorite.com
 	 * For my sanity the CSS is held in a separate file
 	 */
 	function cf_meta_css() {
-		$filepath = ABSPATH.PLUGINDIR.'/cf-post-meta/css/cf-post-meta.css';
+		$filepath = CF_META_PLUGIN_DIR.'css/cf-post-meta.css';
 		if(function_exists('file_get_contents')) {
 			$css = file_get_contents($filepath);
 		}

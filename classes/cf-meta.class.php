@@ -51,8 +51,8 @@ class cf_meta {
 		if(file_exists($config)) { 
 			include_once($config); 
 		}
-		elseif(file_exists(ABSPATH.PLUGINDIR.'/cf-post-meta/'.$config)) { 
-			include_once(ABSPATH.PLUGINDIR.'/cf-post-meta/'.$config); 
+		elseif(file_exists(CF_META_PLUGIN_DIR.''.$config)) { 
+			include_once(CF_META_PLUGIN_DIR.''.$config); 
 		}
 		$this->set_config($cf_meta_config);
 	}
