@@ -70,8 +70,16 @@ class cfs_input_block extends cf_input_block {
 				}
 			</script>';
 
+		/* If we have add_another button text set, use that instead of the block_label */
+		if (isset($this->config['add_another_button_text']) && !empty($this->config['add_another_button_text'])) {
+			$add_another_text = $this->config['add_another_button_text'];	
+		}
+		else {
+			$add_another_text = 'Add Another '.$this->config['block_label'];	
+		} 
+		
 		$html .= '<p class="cf_meta_actions"><a href="#" onclick="addAnother'.$this->config['name'].'(); return false;" '.
-			     'class="add_another button-secondary">Add Another '.$this->config['block_label'].'</a></p>'.
+			     'class="add_another button-secondary">'.$add_another_text.'</a></p>'.
 				 '</div><!-- close '.$this->config['name'].' wrapper -->';
 		
 		return $html;
