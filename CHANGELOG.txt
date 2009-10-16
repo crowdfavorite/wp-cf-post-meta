@@ -3,6 +3,8 @@
 ## 1.8
 - Redifining plugin location, so that plugin can be utilized in MU-Plugins or Plugins directory
 - Displaying the "help" that we define in the settings config array.
+- Created new file (cf-input-settings-types-class.php) specifically for extensions of the input type classes, specifically for use with settings page.
+- Fixed bug in "title" display for block types (it wasn't showing at all)
 
 ## 1.7.1
 - Adds filters
