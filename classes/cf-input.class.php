@@ -138,9 +138,8 @@
 						
 			if (is_array($this->config['items'])) {
 				// if we have data then we need to display it first
-				if (!empty($data)) {
+				if (is_array($data) && count($data)) {
 					foreach ($data as $index => $each) {
-						
 						$html .= $this->make_block_item(array('index' => $index++, 'items' => $each));
 					}
 				}

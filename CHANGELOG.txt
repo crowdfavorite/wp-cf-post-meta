@@ -1,5 +1,8 @@
 # CF-Post-Meta Changelog
 
+## 1.8.2
+- Fix a bug that could foreach over a non-array variable.
+
 ## 1.8.1
 - Making the "Add Another..." text a configurable part of the settings for block types.
 
