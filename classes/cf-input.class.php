@@ -514,8 +514,7 @@
 			if(isset($this->config['wysiwyg']) && $this->config['wysiwyg'] == true) {
 				// tinyMCE needs a spacer to help keep it in line, this can probably be solved with css but for now its good
 				$before = '<div style="clear:both">&nbsp;</div>'.
-						  '<div style="border: 1px solid #DFDFDF;">'.
-						  '<div id="'.$this->get_id().'_container">';
+						  '<div><div id="'.$this->get_id().'_container">';
 						
 				$after = '</div></div>
 						   <div style="clear:both">&nbsp;</div>';

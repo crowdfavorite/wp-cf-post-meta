@@ -12,8 +12,22 @@
 	margin-left: 15px;
 	float: none;
 }
-.cf_meta_set input.full {
-	width: 99%;
+.cf_meta_set textarea {
+	width: 98%;
+	height: 150px;
+}
+.cf_meta_set div.cf-tinymce-footer {
+	border-color:#DFDFDF;
+	border-width: 0 1px 1px 1px;
+	background-color:#EDEDED;
+	-moz-border-radius: 0 0 6px 6px;
+	-webkit-border-bottom-right-radius: 6px;
+	-webkit-border-bottom-left-radius: 6px;
+	-khtml-border-bottom-right-radius: 6px;
+	-khtml-border-bottom-left-radius: 6px;
+	border-bottom-right-radius: 6px;
+	border-bottom-left-radius: 6px;
+	height: 25px;
 }
 .cf_meta_kv label {
 	float:left;
