@@ -24,6 +24,14 @@ function cf_meta_metaboxclear($prefs,$option,$user) {
 add_filter('get_user_option_metaboxhidden_page','cf_meta_metaboxclear',10,3);
 add_filter('get_user_option_metaboxhidden_page','cf_meta_metaboxclear',10,3);
 
+function cf_meta_js_wysiwyg_scripts() {
+	echo '
+		<script type="text/javascript" src="'.plugins_url('cf-post-meta/jwysiwyg-0.5/jquery.wysiwyg.js').'"></script>
+		<link rel="stylesheet" href="'.plugins_url('cf-post-meta/jwysiwyg-0.5/jquery.wysiwyg.css').'" type="text/css" media="screen" />
+		';
+}
+add_action('admin_head','cf_meta_js_wysiwyg_scripts');
+
 /**
  * Process a config array in to JS conditionals for toggling
  * the display of items on the page based on the page state
@@ -437,11 +445,11 @@ class cf_meta_js extends cf_meta {
 		}
 		elseif($this->has_wysiwyg($item)) {
 			$this->wysiwyg_items[] = $this->prefix.$item['name'];
-			$enqueue = true;
+			$this->enqueue = true;
 		}
 		
 		// enqueue script if necessary and return
-		if($enqueue) {
+		if($this->enqueue) {
 			//wp_enqueue_script('tiny_mce');
 			//wp_enqueue_script('word-count');
 			return true;
@@ -466,47 +474,8 @@ class cf_meta_js extends cf_meta {
 	function add_wysiwyg() {
 		echo '
 <script type="text/javascript">
-	// must init what we want and run before the WordPress onPageLoad function.
-	// After this function redo the WordPress init so the main editor picks up the WordPress config. 
-	// that is the only way I could get this to work.
-	tinyMCE.init({ ';
-		// compress output whitespace a bit...
-		echo preg_replace('/(\n|\t)/','','
-			mode:"exact",
-			elements:"'.implode(',',$this->wysiwyg_items).'", 
-			onpageload:"", 
-			width:"100%", 
-			theme:"advanced", 
-			skin:"wp_theme", 
-			theme_advanced_buttons1:"bold,italic,underline,|,bullist,numlist,blockquote,|,justifyleft,justifycenter,justifyright,|,link,unlink,|,charmap,spellchecker,code,wp_help", 
-			theme_advanced_buttons2:"", 
-			theme_advanced_buttons3:"", 
-			theme_advanced_buttons4:"", 
-			language:"en", 
-			spellchecker_languages:"+English=en,Danish=da,Dutch=nl,Finnish=fi,French=fr,German=de,Italian=it,Polish=pl,Portuguese=pt,Spanish=es,Swedish=sv", 
-			theme_advanced_toolbar_location:"top", 
-			theme_advanced_toolbar_align:"left", 
-			theme_advanced_statusbar_location:"", 
-			theme_advanced_resizing:"", 
-			theme_advanced_resize_horizontal:"", 
-			dialog_type:"modal", 
-			relative_urls:"", 
-			remove_script_host:"", 
-			convert_urls:"", 
-			apply_source_formatting:"", 
-			remove_linebreaks:"1", 
-			paste_convert_middot_lists:"1", 
-			paste_remove_spans:"1", 
-			paste_remove_styles:"1", 
-			gecko_spellcheck:"1", 
-			entities:"38,amp,60,lt,62,gt", 
-			accessibility_focus:"1", 
-			tab_focus:":prev,:next", 
-			save_callback:"", 
-			wpeditimage_disable_captions:"", 
-			plugins:"safari,inlinepopups,spellchecker,paste"
-		');
-		echo '
+	jQuery(function($) { 
+		$("#'.implode(',#',$this->wysiwyg_items).'").wysiwyg();
 	});
 </script>
 			';
