@@ -26,8 +26,7 @@ add_filter('get_user_option_metaboxhidden_page','cf_meta_metaboxclear',10,3);
 
 function cf_meta_js_wysiwyg_scripts() {
 	echo '
-		<script type="text/javascript" src="'.plugins_url('cf-post-meta/jwysiwyg-0.5/jquery.wysiwyg.js').'"></script>
-		<link rel="stylesheet" href="'.plugins_url('cf-post-meta/jwysiwyg-0.5/jquery.wysiwyg.css').'" type="text/css" media="screen" />
+		<script type="text/javascript" src="'.plugins_url('cf-post-meta/ckeditor/ckeditor.js').'"></script>
 		';
 }
 add_action('admin_head','cf_meta_js_wysiwyg_scripts');
@@ -475,12 +474,43 @@ class cf_meta_js extends cf_meta {
 		echo '
 <script type="text/javascript">
 	jQuery(function($) { 
-		$("#'.implode(',#',$this->wysiwyg_items).'").wysiwyg();
+		';
+		foreach($this->wysiwyg_items as $item) {
+			echo '
+				CKEDITOR.replace( "'.$item.'",{ 
+					customConfig : "/index.php?cf_meta_action=ckeditor_toolbar_config" 
+				});
+			';
+		}
+		echo '
 	});
 </script>
 			';
 		return;
 	}
 }
+
+function cf_meta_ckeditor_toolbar_config() {
+	if(!empty($_GET['cf_meta_action']) && $_GET['cf_meta_action'] == 'ckeditor_toolbar_config') {
+		header('content-type: text/javascript');
+		echo 'CKEDITOR.editorConfig = function( config )
+{
+    config.toolbar = "CFMetaToolbar";
+
+    config.toolbar_CFMetaToolbar =
+    [
+        ["Format"],
+        ["Bold","Italic","Strike"],
+        ["NumberedList","BulletedList","-","Outdent","Indent"],
+        ["Link","Unlink","Image","HorizontalRule","SpecialChar"],
+        ["PasteText","PasteFromWord"],
+        ["Undo","Redo","-","SelectAll","RemoveFormat"]
+    ];
+};
+		';
+		exit;
+	}
+}
+add_action('init','cf_meta_ckeditor_toolbar_config');
 
 ?>
