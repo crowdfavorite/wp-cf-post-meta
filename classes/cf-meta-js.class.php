@@ -11,7 +11,6 @@
  */
 function cf_meta_metaboxclear($prefs,$option,$user) {
 	global $cfmeta,$post;
-	ep($prefs);
 	$cfmeta = cf_meta_gimme(cf_meta_get_type(),$post->ID);
 	if (isset($cfmeta->conditions) && is_array($cfmeta->conditions) && is_array($prefs) && count($prefs)) {
 		foreach ($prefs as $k => $v) {
@@ -20,7 +19,6 @@ function cf_meta_metaboxclear($prefs,$option,$user) {
 			}
 		}
 	}
-	ep($prefs);
 	return $prefs;
 }
 add_filter('get_user_option_metaboxhidden_page','cf_meta_metaboxclear',10,3);
