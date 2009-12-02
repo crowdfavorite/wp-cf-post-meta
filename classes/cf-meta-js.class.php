@@ -11,6 +11,7 @@
  */
 function cf_meta_metaboxclear($prefs,$option,$user) {
 	global $cfmeta,$post;
+	ep($prefs);
 	$cfmeta = cf_meta_gimme(cf_meta_get_type(),$post->ID);
 	if (isset($cfmeta->conditions) && is_array($cfmeta->conditions) && is_array($prefs) && count($prefs)) {
 		foreach ($prefs as $k => $v) {
@@ -19,10 +20,13 @@ function cf_meta_metaboxclear($prefs,$option,$user) {
 			}
 		}
 	}
+	ep($prefs);
 	return $prefs;
 }
 add_filter('get_user_option_metaboxhidden_page','cf_meta_metaboxclear',10,3);
-add_filter('get_user_option_metaboxhidden_page','cf_meta_metaboxclear',10,3);
+add_filter('get_user_option_metaboxhidden_post','cf_meta_metaboxclear',10,3);
+
+
 
 function cf_meta_js_wysiwyg_scripts() {
 	echo '
@@ -154,6 +158,7 @@ class cf_meta_js extends cf_meta {
 //<![CDATA[
 	// Dynamically Generated Javascript for CF-Meta box display control
 	jQuery(document).ready(function(){
+		console.log(jQuery("#in-category-1199:checked").val() !== "1199");
 '.$output.'
 	});'.PHP_EOL;
 			if(is_array($this->comparison_funcs)) {
