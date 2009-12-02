@@ -156,7 +156,6 @@ class cf_meta_js extends cf_meta {
 //<![CDATA[
 	// Dynamically Generated Javascript for CF-Meta box display control
 	jQuery(document).ready(function(){
-		console.log(jQuery("#in-category-1199:checked").val() !== "1199");
 '.$output.'
 	});'.PHP_EOL;
 			if(is_array($this->comparison_funcs)) {
