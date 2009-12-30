@@ -1,5 +1,9 @@
 # CF-Post-Meta Changelog
 
+## 1.9
+
+- Dumping the TinyMCE editor in favor of the CK Editor.
+
 ## 1.8.2
 - Fix a bug that could foreach over a non-array variable.
 
