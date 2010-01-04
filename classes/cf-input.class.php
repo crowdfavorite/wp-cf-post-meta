@@ -67,6 +67,7 @@
 		function cf_input_block($conf) {
 			// default to saving block data as a single entry
 			if(!isset($conf['process_group'])) { $conf['process_group'] = true; }
+			if(!isset($conf['block_label_group'])) { $conf['block_label_group'] = true; }
 			if(!isset($conf['name'])) { $conf['name'] = $conf['block_id']; }
 			$this->config = $conf;
 		}
@@ -129,9 +130,18 @@
 			}
 			// kick off the repeater block with a wrapper div to contain everything
 			$html .= '<div class="block_wrapper">'.
-					 '<h4>'.
-					 (isset($this->config['block_label']) && !empty($this->config['block_label']) ? 'Group for '.$this->config['block_label'] : '&nbsp;').
-					 '</h4>';
+					 '<h4>';
+			if (isset($this->config['block_label']) && !empty($this->config['block_label'])) {
+				// Check and see if the block label group needs to be added
+				if (isset($this->config['block_label_group']) && $this->config['block_label_group'] == true) {
+					$html .= 'Group for ';
+				}
+				$html .= $this->config['block_label'];
+			}
+			else {
+				$html .= '&nbsp;';
+			}
+			$html .= '</h4>';
 			
 			// this div just contains the actual items in the group and it's where new elements are inserted
 			$html .= '<div id="'.$this->config['name'].'" class="insert_container">';
