@@ -54,7 +54,9 @@ class cf_meta {
 		elseif(file_exists(CF_META_PLUGIN_DIR.''.$config)) { 
 			include_once(CF_META_PLUGIN_DIR.''.$config); 
 		}
-		$this->set_config($cf_meta_config);
+		if (!empty($cf_meta_config)) {
+			$this->set_config($cf_meta_config);
+		}
 	}
 
 	/**
