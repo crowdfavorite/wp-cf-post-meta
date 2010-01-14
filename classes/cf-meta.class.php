@@ -48,15 +48,14 @@ class cf_meta {
 	 * @var string $config - full or partial path to the config file
 	 */
 	function import_config($config) {
+		$cf_meta_config = array();
 		if(file_exists($config)) { 
 			include_once($config); 
 		}
-		elseif(file_exists(CF_META_PLUGIN_DIR.''.$config)) { 
-			include_once(CF_META_PLUGIN_DIR.''.$config); 
+		elseif(file_exists(CF_META_PLUGIN_DIR.$config)) { 
+			include_once(CF_META_PLUGIN_DIR.$config); 
 		}
-		if (!empty($cf_meta_config)) {
-			$this->set_config($cf_meta_config);
-		}
+		$this->set_config($cf_meta_config);
 	}
 
 	/**
