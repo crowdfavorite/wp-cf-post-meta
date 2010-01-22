@@ -506,7 +506,8 @@ function cf_meta_ckeditor_toolbar_config() {
         ["NumberedList","BulletedList","-","Outdent","Indent"],
         ["Link","Unlink","Image","HorizontalRule","SpecialChar"],
         ["PasteText","PasteFromWord"],
-        ["Undo","Redo","-","SelectAll","RemoveFormat"]
+        ["Undo","Redo","-","SelectAll","RemoveFormat"],
+		["Source"]
     ];
 };
 		';
