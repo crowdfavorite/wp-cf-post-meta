@@ -164,14 +164,8 @@
 			$html .= '
 				<script type="text/javascript" charset="utf-8">
 					function addAnother'.$this->config['name'].'() {
-						if (jQuery(\'#'.$this->config['name'].'\').children().length > 0) {
-							last_element_index = jQuery(\'#'.$this->config['name'].' fieldset:last\').attr(\'id\').match(/'.$this->config['name'].'_([0-9])/);
-							next_element_index = Number(last_element_index[1])+1;
-						} else {
-							next_element_index = 1;
-						}
 						insert_element = \''.str_replace(PHP_EOL,'',trim($this->make_block_item())).'\';
-						insert_element = insert_element.replace(/'.$this->repeater_index_placeholder.'/g, next_element_index);
+						insert_element = insert_element.replace(/'.$this->repeater_index_placeholder.'/g, jQuery("#'.$this->config['name'].'").children().length);
 						jQuery(insert_element).appendTo(\'#'.$this->config['name'].'\');
 					}
 					function delete'.$this->config['name'].'(del_el) {
