@@ -19,9 +19,11 @@
 .cf_meta_set .wysiwyg {
 	margin-left: 5px;
 }
+.cf_meta_kv {
+	line-height: 25px;
+}
 .cf_meta_kv label {
 	float:left;
-	padding:5px 0;
 	width:24%;
 }
 .cf_meta_kv input,
