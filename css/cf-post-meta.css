@@ -20,7 +20,7 @@
 	margin-left: 5px;
 }
 .cf_meta_kv {
-	line-height: 25px;
+	clear: both;
 }
 .cf_meta_kv label {
 	float:left;
