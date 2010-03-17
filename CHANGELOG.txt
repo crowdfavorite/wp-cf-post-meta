@@ -1,5 +1,9 @@
 # CF-Post-Meta Changelog
 
+## 1.9.1
+
+- Tagging for release
+
 ## 1.9
 
 - Dumping the TinyMCE editor in favor of the CK Editor.
