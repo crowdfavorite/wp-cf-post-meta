@@ -76,6 +76,9 @@ Author URI: http://crowdfavorite.com
 		elseif($type == 'page') {
 			cf_meta_edit_page();
 		}
+		else if (!empty($type)) {
+			cf_meta_edit_custom($type);
+		}
 	}
 	
 	/**
@@ -96,6 +99,12 @@ Author URI: http://crowdfavorite.com
 		$cfmeta->display();
 	}
 	
+	function cf_meta_edit_custom($type) {
+		global $cfmeta, $post;
+		$cfmeta = cf_meta_gimme($type,$post->ID);
+		$cfmeta->display();
+	}
+	
 	/**
 	 * Do the box display code
 	 * @param object $post - the post or page object
@@ -111,17 +120,39 @@ Author URI: http://crowdfavorite.com
 	 * determine which type we're working on
 	 */
 	function cf_meta_get_type() {
-		global $pagenow;
-		switch(true) {
-			case in_array($pagenow, array('post.php','post-new.php')):
+		global $post, $pagenow;
+		
+		// We aren't going to do anything with this outside of the admin
+		if (!is_admin()) { return false; }
+		
+		if (empty($post) || is_null($post)) {
+			if (!empty($_GET['post']) && $_GET['post'] != 0) {
+				return get_post_type(intval($_GET['post']));
+			}
+			else if (!empty($_GET['post_type'])) {
+				return htmlentities($_GET['post_type']);
+			}
+			else if (!empty($_POST['post_id']) || !empty($_POST['post_ID'])) {
+				$post_id = get_post_type(intval($_POST['post_id']));
+				if (empty($post_id)) {
+					$post_id = get_post_type(intval($_POST['post_ID']));
+				}
+				return $post_id;
+			}
+			else if (empty($_GET['post_type']) && !empty($pagenow) && $pagenow == 'post-new.php') {
 				return 'post';
-				break;
-			case in_array( $pagenow, array('page.php','page-new.php')):
+			}
+			else if (empty($_GET['post_type']) && !empty($pagenow) && $pagenow == 'page-new.php') {
+				// For WordPress 2.9- Compatability
 				return 'page';
-				break;
-			default:
-				return false;
+			}
 		}
+		else {
+			if (!empty($post->post_type) && $post->post_type != 'revision') {
+				return $post->post_type;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -130,7 +161,6 @@ Author URI: http://crowdfavorite.com
 	 * @param object $post - post data object
 	 */
 	function cf_meta_save_post($post_id,$post) {
-		
 		if ($_POST['cf_meta_active']) {
 			switch ($post->post_type) {
 				case 'revision':
@@ -138,6 +168,7 @@ Author URI: http://crowdfavorite.com
 					break;
 				case 'page':
 				case 'post':
+				default:
 					$cfmeta = cf_meta_gimme($post->post_type, $post->ID);
 					break;
 			}
@@ -175,6 +206,9 @@ Author URI: http://crowdfavorite.com
 			}
 			elseif($type == 'page') { 
 				$cfmeta = new cf_page_meta('post-meta-config.php',$post_id); 
+			}
+			else if (!empty($type)) {
+				$cfmeta = new cf_custom_meta('post-meta-config.php',$post_id, $type);
 			}
 			else { return false; }
 		}
