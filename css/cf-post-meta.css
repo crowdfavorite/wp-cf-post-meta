@@ -3,6 +3,7 @@
 	clear: both;
 	float: none;
 }
+
 .cf_meta_actions {
 	clear:both;
 	overflow:hidden;
@@ -11,6 +12,15 @@
 .cf_meta_set label.after {
 	margin-left: 15px;
 	float: none;
+}
+.cf_meta_kv_radio {
+	display: ;
+}
+.cf_meta_radio_label {
+	display: inline-block;
+}
+.cf_meta_radio_group{
+	display: inline-block;
 }
 .cf_meta_set textarea {
 	width: 98%;
@@ -44,6 +54,21 @@
 }
 .cf_meta_kv input.cf_meta_cb {
 	width: auto;
+}
+.cf_meta_kv_select {
+	display: block;
+}
+#cf_meta__unique_meta_name {
+	margin-right: 15px;
+}
+.cf_meta_kv_checkbox {
+	display: block;
+}
+.help {
+	color: #999999;
+	display: block;
+	font-size: 10px;
+	margin-left: 220px;
 }
 .block_wrapper {
 	background:#f9f9f9;

@@ -349,15 +349,16 @@
 			if(isset($this->config['before'])) { 
 				$html .= $this->config['before'].PHP_EOL; 
 			}
-			
-			$html .= '<p class="cf_meta_kv">';
+
+			$html .= '<p class="cf_meta_kv cf_meta_kv_'.esc_attr($this->config['type']).'">';
 			if(!isset($this->config['label_position']) || $this->config['label_position'] == 'before' || $this->config['label_position'] != 'after') {
 				$html .= $this->get_label('before').$this->get_input($value);
 			}
 			elseif($this->config['label_position'] == 'after') {
 				$html .= $this->get_input().$this->get_label('after');
 			}
-			$html .= ' '.$this->config['help'].'</p>'.PHP_EOL;
+			$html .= ($this->config['help'] ? '<span class="help">' . $this->config['help'] . '</span>' : '');
+			$html .= ' </p>'.PHP_EOL;
 			
 			if(isset($this->config['after'])) { 
 				$html .= $this->config['after'].PHP_EOL; 
@@ -537,7 +538,7 @@
 			if (is_array($this->config['options']) && count($this->config['options'])) {
 				foreach ($this->config['options'] as $k => $v) {
 					$k == $this->get_value() ? $checked = ' checked="checked"' : $checked = '';
-					$output .= '<p><input type="radio" name="'.$this->get_name().'"id="'.$this->get_id().'" value="'.$k.'"'.$checked.' /> '.$v.'</p>';
+					$output .= '<span class="cf_meta_radio_group"><input type="radio" name="'.$this->get_name().'"id="'.$this->get_id().'" value="'.$k.'"'.$checked.' /> <span class="cf_meta_radio_label">'.$v.'</span></span>';
 				}
 			}
 			return $output;
