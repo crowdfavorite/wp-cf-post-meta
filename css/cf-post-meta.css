@@ -33,8 +33,8 @@
 	clear: both;
 }
 .cf_meta_kv label {
-	float:left;
-	width:24%;
+	float: left;
+	width: 218px;
 }
 .cf_meta_kv input,
 .cf_meta_kv textarea {
