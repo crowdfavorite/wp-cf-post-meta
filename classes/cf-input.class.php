@@ -337,7 +337,18 @@
 			$value = ($value) ? $value : $this->get_value();
 			$class = isset($this->config['label']) ? null : 'class="full" ';
 
-			return '<input type="'.$this->config['type'].'" name="'.$this->get_id().'" id="'.$this->get_id().'" value="'.htmlspecialchars($value).'" '.$class.'/>';
+			return '<input type="'.$this->config['type'].'" name="'.$this->get_id().'" id="'.$this->get_id().'" value="'.htmlspecialchars($value).'" '.$this->attributes().$class.'/>';
+		}
+	
+		function attributes() {
+			$atts = array();
+			if (!empty($this->config['attributes'])) {
+				foreach($this->config['attributes'] as $att_name => $att_value) {
+					$atts[] = $att_name.'="'.$att_value'"';
+				}
+				$atts[] = ''; // fake last element to force a space at the end of the string
+			}
+			return implode(' ', $atts);
 		}
 	
 		/**
