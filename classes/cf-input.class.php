@@ -344,7 +344,7 @@
 			$atts = array();
 			if (!empty($this->config['attributes'])) {
 				foreach($this->config['attributes'] as $att_name => $att_value) {
-					$atts[] = $att_name.'="'.$att_value'"';
+					$atts[] = esc_attr($att_name).'="'.esc_attr($att_value).'"';
 				}
 				$atts[] = ''; // fake last element to force a space at the end of the string
 			}
