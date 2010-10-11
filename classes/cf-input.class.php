@@ -408,6 +408,9 @@
 				if(!empty($value)) { 
 					$this->value = $value; 
 				}
+				else if (!empty($this->config['default_value'])) {
+					$this->value = $this->config['default_value'];
+				}
 				else { 
 					$this->value = null; 
 				}
