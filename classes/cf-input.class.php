@@ -408,7 +408,7 @@
 				if(!empty($value)) { 
 					$this->value = $value; 
 				}
-				else if (!empty($this->config['default_value'])) {
+				else if (!empty($this->config['default_value']) && !in_array($this->config['type'], array('checkbox'))) {
 					$this->value = $this->config['default_value'];
 				}
 				else { 
