@@ -368,7 +368,7 @@
 			elseif($this->config['label_position'] == 'after') {
 				$html .= $this->get_input().$this->get_label('after');
 			}
-			$html .= ($this->config['help'] ? '<span class="help">' . $this->config['help'] . '</span>' : '');
+			$html .= (!empty($this->config['help']) ? '<span class="help">' . $this->config['help'] . '</span>' : '');
 			$html .= ' </p>'.PHP_EOL;
 			
 			if(isset($this->config['after'])) { 
