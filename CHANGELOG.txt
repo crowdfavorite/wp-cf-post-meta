@@ -1,19 +1,18 @@
 # CF-Post-Meta Changelog
 
-##2.0.1
+## 2.0.2
+- Adding support for keeping this plugin in the theme/plugins folder (parent theme support only).
 
+## 2.0.1
 - Updated Readme, Changelog to indicate that it was successfully tested on WP3.0. 
 
-##2.0
-
+## 2.0
 - Tested on WP3.0
 
 ## 1.9.1
-
 - Tagging for release
 
 ## 1.9
-
 - Dumping the TinyMCE editor in favor of the CK Editor.
 
 ## 1.8.2
