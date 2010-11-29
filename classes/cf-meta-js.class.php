@@ -27,8 +27,19 @@ add_filter('get_user_option_metaboxhidden_post','cf_meta_metaboxclear',10,3);
 
 
 function cf_meta_js_wysiwyg_scripts() {
+	$filepath = realpath(dirname(__FILE__));
+	
+	// if we're not in the plugins dir, assume we're in the themes/theme/plugins dir
+	if (preg_match('|wp-content/plugins|', $filepath)) {
+		$url_base = trailingslashit(plugins_url());
+	}
+	elseif(preg_match('|wp-content/themes|', realpath(dirname(__FILE__)))) {
+		$url_base = trailingslashit(get_template_directory_uri()).'plugins/';
+	}
+	$wysiwyg_js_file = 'cf-post-meta/ckeditor/ckeditor.js';
+	
 	echo '
-		<script type="text/javascript" src="'.plugins_url('cf-post-meta/ckeditor/ckeditor.js').'"></script>
+		<script type="text/javascript" src="'.apply_filters('cf_meta_wysiwyg_js_url', $url_base.$wysiwyg_js_file, $url_base, $wysiwyg_js_file).'"></script>
 		';
 }
 add_action('admin_head','cf_meta_js_wysiwyg_scripts');
