@@ -130,7 +130,8 @@ The Post Meta plugin has a special "block" repeater type that allows a set of el
 				array(
 					'name' => '_unique_meta_key',
 					'type' => 'block',
-					'block_label' => 'Label Text',			// optional, used for "add another block_label" button text
+					'block_label' => 'Items',			// adds a label to the block of elements
+					'block_label_singular' => 'Item',	// adds a singular label to the "add new" button (otherwise defaults to block_label)
 					'items' => array(						// required, elements in the repeatable block
 						array(
 							'name' => '_unique_element_name',
@@ -253,27 +254,27 @@ The Post Meta plugin can match arbitrary elements in the DOM, allowing access to
 	// Simple comparison check
 	$feature_cat_id = get_cat_ID('Featured Article');
 	$config[] = array(
-					  'title' => 'Featured Article',
-					  'description' => 'Fields available for Featured Articles',
-					  'type' => array('post'),
-					  'id' => 'abcd-feature-article-fields',
-					  'add_to_sortables' => true,
-					  'items' => array(
-									   array(
-											 'name' => '_feature_sub_head',
-											 'label' => 'Sub Headline',
-											 'type' => 'text'
-											 )
-									   ),
-					  'condition' => array(
-										   array(
-												 'type' => '#in-category-' . $feature_cat_id . ':checked',
-												 'comparison' => '==',
-												 'bind-change' => '#in-category-'. $feature_cat_id, // optional; element to bind the change event
-												 'value' => $feature_cat_id
-												 )
-										   )
-					  );
+		'title' => 'Featured Article',
+		'description' => 'Fields available for Featured Articles',
+		'type' => array('post'),
+		'id' => 'abcd-feature-article-fields',
+		'add_to_sortables' => true,
+		'items' => array(
+			array(
+				'name' => '_feature_sub_head',
+				'label' => 'Sub Headline',
+				'type' => 'text'
+			)
+		),
+		'condition' => array(
+			array(
+				'type' => '#in-category-' . $feature_cat_id . ':checked',
+				'comparison' => '==',
+				'bind-change' => '#in-category-'. $feature_cat_id, // optional; element to bind the change event
+				'value' => $feature_cat_id
+			)
+		)
+	);
 	
 	return $config;
 }
