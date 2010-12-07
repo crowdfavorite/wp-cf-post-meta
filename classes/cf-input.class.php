@@ -176,7 +176,7 @@
 				</script>';
 
 			$html .= '<p class="cf_meta_actions"><a href="#" onclick="addAnother'.$this->config['name'].'(); return false;" '.
-				     'class="add_another button-secondary">Add Another '.$this->config['block_label'].'</a></p>'.
+				     'class="add_another button-secondary">Add Another '.(!empty($this->config['block_label_singular']) ? $this->config['block_label_singular'] : $this->config['block_label']).'</a></p>'.
 					 '</div><!-- close '.$this->config['name'].' wrapper -->';
 			
 			return $html;
