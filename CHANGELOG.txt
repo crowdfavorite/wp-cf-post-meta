@@ -6,6 +6,7 @@
 - Added ability to set default values on all element types.
 - Silencing potential PHP notices.
 - CSS hardening.
+- Added config option for more friendly repeater block buttons
 
 ## 2.0.1
 - Updated Readme, Changelog to indicate that it was successfully tested on WP3.0. 
