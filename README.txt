@@ -132,6 +132,7 @@ The Post Meta plugin has a special "block" repeater type that allows a set of el
 					'type' => 'block',
 					'block_label' => 'Items',			// adds a label to the block of elements
 					'block_label_singular' => 'Item',	// adds a singular label to the "add new" button (otherwise defaults to block_label)
+					'block_class' => 'classname',		// optional, classname to add to the block wrapper
 					'items' => array(						// required, elements in the repeatable block
 						array(
 							'name' => '_unique_element_name',

@@ -129,7 +129,7 @@
 				$data = maybe_unserialize($data);
 			}
 			// kick off the repeater block with a wrapper div to contain everything
-			$html .= '<div class="block_wrapper '.$this->config['block_class'].'">'.
+			$html .= '<div class="block_wrapper'.(!empty($this->config['block_class']) ? ' '.$this->config['block_class'] : null).'">'.
 					 '<h4>';
 			if (isset($this->config['block_label']) && !empty($this->config['block_label'])) {
 				// Check and see if the block label group needs to be added
