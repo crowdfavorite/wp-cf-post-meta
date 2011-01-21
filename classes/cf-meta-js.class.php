@@ -98,7 +98,11 @@ class cf_meta_js extends cf_meta {
 			'<'  => '>',
 			'>'  => '<',
 			'>=' => '<=',
-			'<=' => '>='
+			'<=' => '>=',
+			'==' => '!=',
+			'===' => '!==',
+			'!=' => '==',
+			'!==' => '===',
 		);
 		return true;
 	}
@@ -214,8 +218,17 @@ class cf_meta_js extends cf_meta {
 		// make click conditions
 		foreach($set as $cond) {
 			$func = $cond['type'];
-			if(method_exists($this,$func)) {
-				$identifier = '#'.$this->$func(true);
+			if (method_exists($this, $func)) {
+				switch ($func) {
+					case 'attribute':
+					error_log('cond '.$cond['selector']);
+						$identifier = $cond['selector'];
+						
+						break;
+					default:
+						$identifier = '#'.$this->$func(true);
+						break;
+				}
 			}
 			else {
 				if (isset($cond['bind-change'])) {
@@ -318,7 +331,15 @@ class cf_meta_js extends cf_meta {
 		$func = $cond['type'];
 		$jquery = false;
 		if(method_exists($this,$func)) {
-			$jquery = $this->$func();
+			switch ($func) {
+				case 'attribute':
+					$jquery = $this->$func($cond['selector'], $cond['attribute']);
+					break;
+				
+				default:
+					$jquery = $this->$func();
+					break;
+			}
 		}
 		else {
 			$jquery = $this->generic_func($func);
@@ -333,24 +354,34 @@ class cf_meta_js extends cf_meta {
 			// multi-condition given and multi-value comparison given
 			$ret = array();
 			foreach($cond['value'] as $value) {
-				$ret[] = $jquery.' '.($invert ? '!' : '').$cond['comparison'].' "'.$value.'"';
+				$ret[] = $jquery.' '.($invert ? $this->inverted[$cond['comparison']] : $cond['comparison']).' "'.$value.'"';
 			}
 			return is_array($ret) ? '('.implode(' '.$method.' ',$ret).')' : null;
 		}
 		else {
 			// single comparison value given, single return
-			return $jquery.' '.($invert ? '!' : '').$cond['comparison'].' "'.$cond['value'].'"';
+			return $jquery.' '.($invert ? $this->inverted[$cond['comparison']] : $cond['comparison']).' "'.$cond['value'].'"';
 		}
 	}
 	
 	/**
 	 * We've been given an ID, use it to build a generic jQuery func call
 	 *
-	 * @param string $func 
+	 * @param string $identifier 
 	 * @return string
 	 */
 	function generic_func($identifier) {
 		return 'jQuery("'.$identifier.'").val()';
+	}
+	
+	/**
+	 * Given an ID of a checkbox/radio, use it to build a jQuery func call
+	 *
+	 * @param string $identifier
+	 * @return string
+	 */
+	function attribute($identifier, $attribute) {
+		return 'jQuery("'.$identifier.'").attr("'.$attribute.'")';
 	}
 	
 	/**
