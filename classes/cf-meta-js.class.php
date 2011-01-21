@@ -221,10 +221,9 @@ class cf_meta_js extends cf_meta {
 			if (method_exists($this, $func)) {
 				switch ($func) {
 					case 'attribute':
-					error_log('cond '.$cond['selector']);
 						$identifier = $cond['selector'];
-						
 						break;
+
 					default:
 						$identifier = '#'.$this->$func(true);
 						break;
