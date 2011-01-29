@@ -18,8 +18,9 @@
 }
 .cf_meta_radio_label {
 	display: inline-block;
+	padding-right: 5px;
 }
-.cf_meta_radio_group{
+.cf_meta_radio_group {
 	display: inline-block;
 }
 .cf_meta_set textarea {
@@ -36,7 +37,7 @@
 	float: left;
 	width: 218px;
 }
-.cf_meta_kv input,
+.cf_meta_kv input[type='text'],
 .cf_meta_kv textarea {
 	border-radius:3px;
 	-webkit-border-radius:3px;
@@ -44,6 +45,7 @@
 	-khtml-border-radius:3px;
 	width: 65%;
 }
+
 .cf_meta_kv textarea {
 	height: 4.5em;
 }
