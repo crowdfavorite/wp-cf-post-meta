@@ -1,6 +1,6 @@
 # CF-Post-Meta Changelog
 
-## 2.0.2 (trunk)
+## 2.0.2
 - Adding support for keeping this plugin in the theme/plugins folder (parent theme support only).
 - Added support for extra attributes on text-inputs.
 - Added ability to set default values on all element types.

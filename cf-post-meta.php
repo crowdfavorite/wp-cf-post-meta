@@ -7,7 +7,7 @@ Version: 2.0.2
 Author: Crowd Favorite
 Author URI: http://crowdfavorite.com
 */	
-/* Tested back to PHP 4.4.7 & up to PHP 5.2.9 */
+/* Tested back to PHP 4.4.7 & up to PHP 5.3.5 */
 	
 	/**
 	 * Plugin version ID
