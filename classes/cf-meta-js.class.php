@@ -33,8 +33,12 @@ function cf_meta_js_wysiwyg_scripts() {
 	if (preg_match('|wp-content/plugins|', $filepath)) {
 		$url_base = trailingslashit(plugins_url());
 	}
-	elseif(preg_match('|wp-content/themes|', realpath(dirname(__FILE__)))) {
+	else if (preg_match('|wp-content/themes|', realpath(dirname(__FILE__)))) {
 		$url_base = trailingslashit(get_template_directory_uri()).'plugins/';
+	}
+	else {
+	// just in case we're a symink or something...
+		$url_base = trailingslashit(plugins_url());
 	}
 	$wysiwyg_js_file = 'cf-post-meta/ckeditor/ckeditor.js';
 	
