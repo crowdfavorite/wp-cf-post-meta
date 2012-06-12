@@ -95,16 +95,20 @@ Author URI: http://crowdfavorite.com
 	 */
 	function cf_meta_edit_page() {
 		global $cfmeta,$post;
-		$cfmeta = cf_meta_gimme('page',$post->ID);
-		$cfmeta->display();
+		if (is_object($post)) {
+			$cfmeta = cf_meta_gimme('page',$post->ID);
+			$cfmeta->display();
+		}
 	}
-	
+
 	function cf_meta_edit_custom($type) {
 		global $cfmeta, $post;
-		$cfmeta = cf_meta_gimme($type,$post->ID);
-		$cfmeta->display();
+		if (is_object($post)) {
+			$cfmeta = cf_meta_gimme($type,$post->ID);
+			$cfmeta->display();
+		}
 	}
-	
+
 	/**
 	 * Do the box display code
 	 * @param object $post - the post or page object
