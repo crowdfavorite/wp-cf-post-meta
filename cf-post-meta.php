@@ -136,11 +136,12 @@ Author URI: http://crowdfavorite.com
 			else if (!empty($_GET['post_type'])) {
 				return htmlentities($_GET['post_type']);
 			}
-			else if (!empty($_POST['post_id']) || !empty($_POST['post_ID'])) {
+			else if (!empty($_POST['post_id'])) {
 				$post_id = get_post_type(intval($_POST['post_id']));
-				if (empty($post_id)) {
-					$post_id = get_post_type(intval($_POST['post_ID']));
-				}
+				return $post_id;
+			}
+			else if (!empty($_POST['post_ID'])) {
+				$post_id = get_post_type(intval($_POST['post_ID']));
 				return $post_id;
 			}
 			else if (empty($_GET['post_type']) && !empty($pagenow) && $pagenow == 'post-new.php') {
