@@ -166,7 +166,7 @@ Author URI: http://crowdfavorite.com
 	 * @param object $post - post data object
 	 */
 	function cf_meta_save_post($post_id,$post) {
-		if ($_POST['cf_meta_active']) {
+		if (isset($_POST['cf_meta_active']) && $_POST['cf_meta_active']) {
 			switch ($post->post_type) {
 				case 'revision':
 					return;
