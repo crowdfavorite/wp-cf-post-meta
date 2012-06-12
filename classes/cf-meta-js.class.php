@@ -477,14 +477,14 @@ class cf_meta_js extends cf_meta {
 	function check_wysiwyg($item) {
 		// make sure wysiwyg_items is an array before we put anything in it
 		if(!is_array($this->wysiwyg_items)) { $this->wysiwyg_items = array(); }
-		
+
 		// check item for WYSIWYG requirement
-		$enqueue = false;
+		$this->enqueue = false;
 		if($item['type'] == 'block') {
 			foreach($item['items'] as $block_item) {
 				if($this->has_wysiwyg($block_item)) {
 					$this->wysiwyg_items[] = $this->prefix.$block_item['name'];
-					$enqueue = true;
+					$this->enqueue = true;
 					break; // no need to check any further
 				}
 			}
