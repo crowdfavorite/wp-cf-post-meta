@@ -572,7 +572,7 @@
 		
 		// this removes the post_meta altogether if there isn't a value present in the $_POST array, thereby allowing unchecked boxes to save.
 		function save() {
-			if (!$_POST[$this->get_name()]) {
+			if (empty($_POST[$this->get_name()])) {
 				return delete_post_meta($this->config['post_id'], $this->config['name']);
 			} else {
 				return update_post_meta($this->config['post_id'], $this->config['name'], $_POST[$this->get_name()]);
