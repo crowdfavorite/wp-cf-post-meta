@@ -492,11 +492,11 @@ class cf_meta_js extends cf_meta {
 		}
 		elseif($this->has_wysiwyg($item)) {
 			$this->wysiwyg_items[] = $this->prefix.$item['name'];
-			$this->enqueue = true;
+			$enqueue = true;
 		}
 		
 		// enqueue script if necessary and return
-		if($this->enqueue) {
+		if($enqueue) {
 			//wp_enqueue_script('tiny_mce');
 			//wp_enqueue_script('word-count');
 			return true;
