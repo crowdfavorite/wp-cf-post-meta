@@ -12,7 +12,7 @@
 		 * Construct
 		 * Adds some vars manually to accommodate legacy config arrays
 		 */
-		function cf_input_set($set) {
+		function __construct($set) {
 			if(!isset($set['priority'])) { $set['priority'] = 'core'; }
 			if(!isset($set['context'])) { $set['context'] = 'normal'; }
 			$this->set = $set;
@@ -22,7 +22,8 @@
 		 * display the set contents
 		 */
 		function display() {
-			$html = '';
+			// Hey, you can put javascript here now
+			$html = apply_filters('cf_meta_box_head', '', $this->set['id']);
 			if(isset($this->set['description'])) { 
 				$html .= '<p>'.$this->set['description'].'</p>'.PHP_EOL; 
 			}
@@ -64,7 +65,7 @@
 		
 		var $repeater_index_placeholder = '###INDEX###';
 		
-		function cf_input_block($conf) {
+		function __construct($conf) {
 			// default to saving block data as a single entry
 			if(!isset($conf['process_group'])) { $conf['process_group'] = true; }
 			if(!isset($conf['block_label_group'])) { $conf['block_label_group'] = true; }
