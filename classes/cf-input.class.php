@@ -70,6 +70,7 @@
 			if(!isset($conf['process_group'])) { $conf['process_group'] = true; }
 			if(!isset($conf['block_label_group'])) { $conf['block_label_group'] = true; }
 			if(!isset($conf['name'])) { $conf['name'] = $conf['block_id']; }
+			if(!isset($conf['prefix'])) { $conf['prefix'] = $conf['name']; }
 			$this->config = $conf;
 		}
 		
@@ -99,7 +100,7 @@
 				$item['item_name'] = $item['name'];
 				$item['item_index'] = $data['index'];
 				$item['name'] = 'blocks['.$this->config['name'].']['.$data['index'].']['.$item['name'].']';
-				$item['prefix'] = $this->set['prefix'];
+				$item['prefix'] = $this->config['prefix'];
 
 				if(class_exists('cf_input_'.$item['type'])) {
 					$type = 'cf_input_'.$item['type'];
@@ -130,7 +131,7 @@
 				$data = maybe_unserialize($data);
 			}
 			// kick off the repeater block with a wrapper div to contain everything
-			$html .= '<div class="block_wrapper'.(!empty($this->config['block_class']) ? ' '.$this->config['block_class'] : null).'">'.
+			$html = '<div class="block_wrapper'.(!empty($this->config['block_class']) ? ' '.$this->config['block_class'] : null).'">'.
 					 '<h4>';
 			if (isset($this->config['block_label']) && !empty($this->config['block_label'])) {
 				// Check and see if the block label group needs to be added
