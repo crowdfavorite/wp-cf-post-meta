@@ -1,5 +1,11 @@
 # CF-Post-Meta Changelog
 
+## 2.0.3
+- Add ability for custom JS in the head of a meta box via filter
+- Fix a few PHP notices that were thrown on edge cases
+- Spacing fixes
+- Block repeaters are now sent and saved with the prefix as to not populate $_POST['blocks']
+
 ## 2.0.2
 - Adding support for keeping this plugin in the theme/plugins folder (parent theme support only).
 - Added support for extra attributes on text-inputs.
