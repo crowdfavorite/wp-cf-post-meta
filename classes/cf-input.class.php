@@ -12,7 +12,7 @@
 		 * Construct
 		 * Adds some vars manually to accommodate legacy config arrays
 		 */
-		function cf_input_set($set) {
+		function __construct($set) {
 			if(!isset($set['priority'])) { $set['priority'] = 'core'; }
 			if(!isset($set['context'])) { $set['context'] = 'normal'; }
 			$this->set = $set;
@@ -22,7 +22,8 @@
 		 * display the set contents
 		 */
 		function display() {
-			$html = '';
+			// Hey, you can put javascript here now
+			$html = apply_filters('cf_meta_box_head', '', $this->set['id']);
 			if(isset($this->set['description'])) { 
 				$html .= '<p>'.$this->set['description'].'</p>'.PHP_EOL; 
 			}
@@ -64,11 +65,12 @@
 		
 		var $repeater_index_placeholder = '###INDEX###';
 		
-		function cf_input_block($conf) {
+		function __construct($conf) {
 			// default to saving block data as a single entry
 			if(!isset($conf['process_group'])) { $conf['process_group'] = true; }
 			if(!isset($conf['block_label_group'])) { $conf['block_label_group'] = true; }
 			if(!isset($conf['name'])) { $conf['name'] = $conf['block_id']; }
+			if(!isset($conf['prefix'])) { $conf['prefix'] = $conf['name']; }
 			$this->config = $conf;
 		}
 		
@@ -98,7 +100,7 @@
 				$item['item_name'] = $item['name'];
 				$item['item_index'] = $data['index'];
 				$item['name'] = 'blocks['.$this->config['name'].']['.$data['index'].']['.$item['name'].']';
-				$item['prefix'] = $this->set['prefix'];
+				$item['prefix'] = $this->config['prefix'];
 
 				if(class_exists('cf_input_'.$item['type'])) {
 					$type = 'cf_input_'.$item['type'];
@@ -129,7 +131,7 @@
 				$data = maybe_unserialize($data);
 			}
 			// kick off the repeater block with a wrapper div to contain everything
-			$html .= '<div class="block_wrapper'.(!empty($this->config['block_class']) ? ' '.$this->config['block_class'] : null).'">'.
+			$html = '<div class="block_wrapper'.(!empty($this->config['block_class']) ? ' '.$this->config['block_class'] : null).'">'.
 					 '<h4>';
 			if (isset($this->config['block_label']) && !empty($this->config['block_label'])) {
 				// Check and see if the block label group needs to be added
@@ -211,8 +213,8 @@
 		 */
 		function save_group($post) {
 			$save_array = array();
-			if (isset($post['blocks'][$this->config['name']])) {
-				foreach ($post['blocks'][$this->config['name']] as $value) {
+			if (isset($post[$this->config['prefix'].'blocks'][$this->config['name']])) {
+				foreach ($post[$this->config['prefix'].'blocks'][$this->config['name']] as $value) {
 					// keep items where all values are empty from being saved
 					$control = '';
 					foreach($value as $item) { $control .= $item; }
@@ -549,6 +551,7 @@
 			return cf_input::cf_input($conf);
 		}
 		function get_input() {
+			$output = '';
 			if (is_array($this->config['options']) && count($this->config['options'])) {
 				foreach ($this->config['options'] as $k => $v) {
 					$k == $this->get_value() ? $checked = ' checked="checked"' : $checked = '';
@@ -572,7 +575,7 @@
 		
 		// this removes the post_meta altogether if there isn't a value present in the $_POST array, thereby allowing unchecked boxes to save.
 		function save() {
-			if (!$_POST[$this->get_name()]) {
+			if (empty($_POST[$this->get_name()])) {
 				return delete_post_meta($this->config['post_id'], $this->config['name']);
 			} else {
 				return update_post_meta($this->config['post_id'], $this->config['name'], $_POST[$this->get_name()]);

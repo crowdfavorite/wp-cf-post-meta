@@ -4,9 +4,9 @@
  * Manipulate the user prefs to always show our manipulated boxes, otherwise
  * a user can destroy the functionality of this plugin's show/hide conditionals.
  *
- * @param array $prefs 
- * @param string $option 
- * @param ing $user 
+ * @param array $prefs
+ * @param string $option
+ * @param ing $user
  * @return array - modified user prefs
  */
 function cf_meta_metaboxclear($prefs,$option,$user) {
@@ -27,21 +27,22 @@ add_filter('get_user_option_metaboxhidden_post','cf_meta_metaboxclear',10,3);
 
 
 function cf_meta_js_wysiwyg_scripts() {
-	$filepath = realpath(dirname(__FILE__));
-	
-	// if we're not in the plugins dir, assume we're in the themes/theme/plugins dir
-	if (preg_match('|wp-content/plugins|', $filepath)) {
-		$url_base = trailingslashit(plugins_url());
+	$filepath = dirname(realpath(dirname(__FILE__)));
+
+	// plugins_url() is smart enough to handle mu-plugins/ or plugins/
+	if (preg_match('|wp-content/(mu\-)?plugins|', $filepath)) {
+		$url_base = trailingslashit(plugins_url(null, $filepath));
 	}
-	else if (preg_match('|wp-content/themes|', realpath(dirname(__FILE__)))) {
+	else if (preg_match('|wp-content/themes|', $filepath)) {
 		$url_base = trailingslashit(get_template_directory_uri()).'plugins/';
 	}
 	else {
 	// just in case we're a symink or something...
 		$url_base = trailingslashit(plugins_url());
 	}
+
 	$wysiwyg_js_file = 'cf-post-meta/ckeditor/ckeditor.js';
-	
+
 	echo '
 		<script type="text/javascript" src="'.apply_filters('cf_meta_wysiwyg_js_url', $url_base.$wysiwyg_js_file, $url_base, $wysiwyg_js_file).'"></script>
 		';
@@ -59,38 +60,38 @@ class cf_meta_js extends cf_meta {
 	 * Whether we've loaded the WYSIWYG javascript libraries for TinyMCE
 	 */
 	var $wysiwyg = false;
-	
+
 	/**
 	 * Items to apply tiny_mce to
 	 */
 	var $wysiwyg_items;
-	
+
 	/**
 	 * Our conditions to process
 	 *
 	 * @var array
 	 */
 	var $conditions;
-	
+
 	/**
 	 * Array of comparison inversions
 	 *
 	 * @var array
 	 */
 	var $inverted = array();
-	
+
 	/**
 	 * Array of comparison functions to output to consolidate code
 	 *
 	 * @var string
 	 */
 	var $comparison_funcs = array();
-	
+
 	/**
 	 * Construct
 	 * Set the internal conditions value as well as a comparison inversion chart
 	 *
-	 * @param array $conditions 
+	 * @param array $conditions
 	 * @return bool
 	 */
 	function cf_meta_js($config,$post_id) {
@@ -110,11 +111,11 @@ class cf_meta_js extends cf_meta {
 		);
 		return true;
 	}
-	
+
 	/**
 	 * Extend the set config function
 	 *
-	 * @param array $config 
+	 * @param array $config
 	 * @return bool
 	 */
 	function set_config($config) {
@@ -122,9 +123,9 @@ class cf_meta_js extends cf_meta {
 			foreach($this->config as $conf) {
 				// check display conditions
 				if($this->has_js_condition($conf)) {
-					$this->add_condition($conf); 
+					$this->add_condition($conf);
 				}
-			
+
 				foreach($conf['items'] as $key => $item) {
 					$this->check_wysiwyg($item);
 				}
@@ -132,7 +133,7 @@ class cf_meta_js extends cf_meta {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Extend the display function to dump the JS to page
 	 */
@@ -152,7 +153,7 @@ class cf_meta_js extends cf_meta {
 			$this->display_conditions();
 		}
 	}
-	
+
 	/**
 	 * Parent display function
 	 * dispatches to other functions to build dynamic JS
@@ -162,7 +163,7 @@ class cf_meta_js extends cf_meta {
 		foreach($this->conditions as $id => $set) {
 			if(is_array($set)) {
 				$ret = $this->do_set($set,$id.'_container');
-				if(!$ret) { 
+				if(!$ret) {
 					return false;
 				}
 				$output .= $ret;
@@ -179,7 +180,7 @@ class cf_meta_js extends cf_meta {
 	});'.PHP_EOL;
 			if(is_array($this->comparison_funcs)) {
 				foreach($this->comparison_funcs as $id => $func) {
-					echo PHP_EOL.'	// CF-Meta comparison function for '.$id.$func;					
+					echo PHP_EOL.'	// CF-Meta comparison function for '.$id.$func;
 				}
 			}
 			echo '
@@ -187,15 +188,16 @@ class cf_meta_js extends cf_meta {
 </script>'.PHP_EOL;
 		}
 	}
-	
+
 	/**
 	 * Process an Input Set's javascript
 	 *
-	 * @param array $set - config values for building the JS 
+	 * @param array $set - config values for building the JS
 	 * @param string $id - id of the set being targeted
 	 * @return string javascript
 	 */
 	function do_set($set,$id) {
+		$method = '&&';
 		// if we have a comparison then we can do multiple comparisons
 		if(isset($set['method'])) {
 			$method = $set['method'];
@@ -205,20 +207,20 @@ class cf_meta_js extends cf_meta {
 			// malformed config
 			return false;
 		}
-		
+
 		// build page load comparison for initial show/hide
 		$comparison = $this->build_comparison_func($method,$id,$set);
-		// build toggle function 
+		// build toggle function
 		$toggle = $this->build_toggle_func($method,$id,$set);
-		
+
 		// don't proceed if we encountered an error in processing
-		if($comparison == false || $toggle == false) { 
-			return false; 
+		if($comparison == false || $toggle == false) {
+			return false;
 		}
-		
+
 		// start output with an identifier and comparision function
 		$output = '		// CF-Meta Dynamic JS for #'.$id.$comparison;
-		
+
 		// make click conditions
 		foreach($set as $cond) {
 			$func = $cond['type'];
@@ -247,23 +249,23 @@ class cf_meta_js extends cf_meta {
 		}
 		return $output.PHP_EOL;
 	}
-	
+
 	/**
 	 * Build a comparison function to handle the item display on initial page load
 	 * requires inverting the comparison methods to explicitly hide when conditions aren't met.
 	 * Code returned is designed to be called at dom ready.
 	 *
-	 * @param string $method 
-	 * @param string $id 
-	 * @param array $set 
+	 * @param string $method
+	 * @param string $id
+	 * @param array $set
 	 * @return string
 	 */
 	function build_comparison_func($method,$id,$set) {
 		$items = array();
 		foreach($set as $cond) {
 			$ret = $this->build_comparison($cond,true);
-			if(!$ret) { 
-				return false; 
+			if(!$ret) {
+				return false;
 			}
 			$items[] = $ret;
 		}
@@ -275,29 +277,29 @@ class cf_meta_js extends cf_meta {
 		'.PHP_EOL;
 		return $comparison;
 	}
-	
+
 	/**
 	 * Build the toggle function for a set
 	 * After building the comparison function the func is logged to an array for later output
 	 * The function name is returned so it can be used inside click events
 	 *
-	 * @param string $method 
-	 * @param string $id 
-	 * @param array $set 
+	 * @param string $method
+	 * @param string $id
+	 * @param array $set
 	 * @return string function name
 	 */
 	function build_toggle_func($method,$id,$set) {
 		// build function name
 		$funcname = str_replace(array('-'),'_',strtolower($id)).'_comparison';
-		
+
 		// build toggle comparison for input change show/hide
 		$items = array();
 		foreach($set as $cond) {
 			$ret = $this->build_comparison($cond);
-			if(!$ret) { 
-				return false; 
+			if(!$ret) {
+				return false;
 			}
-			$items[] = $ret; 
+			$items[] = $ret;
 		}
 
 		// page load comparison function for this set
@@ -310,17 +312,17 @@ class cf_meta_js extends cf_meta {
 			jQuery("#'.$id.'").hide();
 		}
 	}'.PHP_EOL;
-		
-		$this->comparison_funcs[$id] = $toggle;	
+
+		$this->comparison_funcs[$id] = $toggle;
 		return $funcname;
 	}
-	
+
 	/**
 	 * Build the JS comparisons based on the config values
 	 * Needs to accept the invert parameter to be able to do opposite comparisons
 	 * This is needed to handle negative conditions on page load and positive for toggles
 	 *
-	 * @param array $cond - array of conditional values 
+	 * @param array $cond - array of conditional values
 	 * @param bool $invert - whether to invert the comparison operators or not
 	 * @return string
 	 */
@@ -338,7 +340,7 @@ class cf_meta_js extends cf_meta {
 				case 'attribute':
 					$jquery = $this->$func($cond['selector'], $cond['attribute']);
 					break;
-				
+
 				default:
 					$jquery = $this->$func();
 					break;
@@ -348,11 +350,14 @@ class cf_meta_js extends cf_meta {
 			$jquery = $this->generic_func($func);
 		}
 		if(!$jquery) { return false; }
-		
+
 		// build the comparison
+		if (!isset($cond['method'])) {
+			$cond['method'] = '&&';
+		}
 		$method = $invert ? $this->inverted[$cond['method']] : $cond['method'];
 		unset($cond['method']);
-		
+
 		if(is_array($cond['value'])) {
 			// multi-condition given and multi-value comparison given
 			$ret = array();
@@ -366,17 +371,17 @@ class cf_meta_js extends cf_meta {
 			return $jquery.' '.($invert ? $this->inverted[$cond['comparison']] : $cond['comparison']).' "'.$cond['value'].'"';
 		}
 	}
-	
+
 	/**
 	 * We've been given an ID, use it to build a generic jQuery func call
 	 *
-	 * @param string $identifier 
+	 * @param string $identifier
 	 * @return string
 	 */
 	function generic_func($identifier) {
 		return 'jQuery("'.$identifier.'").val()';
 	}
-	
+
 	/**
 	 * Given an ID of a checkbox/radio, use it to build a jQuery func call
 	 *
@@ -386,17 +391,17 @@ class cf_meta_js extends cf_meta {
 	function attribute($identifier, $attribute) {
 		return 'jQuery("'.$identifier.'").attr("'.$attribute.'")';
 	}
-	
+
 	/**
 	 * The following functions target specific WordPress Admin UI elements.
 	 * WordPress elements are targeted specifically so that any upgrades to
 	 * the WP UI are easily managed.
 	 */
-	
+
 		/**
 		 * Returns id and/or javascript for targeting the page_template value
 		 *
-		 * @param bool $id_only 
+		 * @param bool $id_only
 		 * @return string
 		 */
 		function page_template($id_only=false) {
@@ -410,7 +415,7 @@ class cf_meta_js extends cf_meta {
 		/**
 		 * Returns id and/or javascript for targeting the page_parent value
 		 *
-		 * @param bool $id_only 
+		 * @param bool $id_only
 		 * @return string
 		 */
 		function page_parent($id_only=false) {
@@ -420,11 +425,11 @@ class cf_meta_js extends cf_meta {
 			}
 			return 'jQuery("#'.$id.' option:selected").val()';
 		}
-	
+
 		/**
 		 * Returns id and/or javascript for targeting the post_status value
 		 *
-		 * @param bool $id_only 
+		 * @param bool $id_only
 		 * @return string
 		 */
 		function post_status($id_only=false) {
@@ -438,9 +443,9 @@ class cf_meta_js extends cf_meta {
 		/**
 		 * Returns id and/or javascript for targeting the category value
 		 *
-		 * @param bool $id_only 
+		 * @param bool $id_only
 		 * @return string
-		 */	
+		 */
 		function category($id_only=false) {
 			if($id_only) {
 				return $id;
@@ -451,17 +456,17 @@ class cf_meta_js extends cf_meta {
 	/**
 	 * Check to see if an item has any JS conditionals for its display
 	 *
-	 * @param array $item 
+	 * @param array $item
 	 * @return bool
 	 */
 	function has_js_condition($item) {
 		return isset($item['condition']) && is_array($item['condition']);
 	}
-	
+
 	/**
 	 * Add condition to the global conditions for processing
 	 *
-	 * @param array $item 
+	 * @param array $item
 	 * @return bool
 	 */
 	function add_condition($item) {
@@ -469,40 +474,41 @@ class cf_meta_js extends cf_meta {
 	}
 
 	// WYSIWYG Functions
-	
+
 	/**
 	 * Check to see if we need to enqeue tinyMCE scripts or not
 	 * @param array $item - a config item
 	 */
 	function check_wysiwyg($item) {
+		$enqueue = false;
 		// make sure wysiwyg_items is an array before we put anything in it
 		if(!is_array($this->wysiwyg_items)) { $this->wysiwyg_items = array(); }
-		
+
 		// check item for WYSIWYG requirement
-		$enqueue = false;
+		$this->enqueue = false;
 		if($item['type'] == 'block') {
 			foreach($item['items'] as $block_item) {
 				if($this->has_wysiwyg($block_item)) {
 					$this->wysiwyg_items[] = $this->prefix.$block_item['name'];
-					$enqueue = true;
+					$this->enqueue = true;
 					break; // no need to check any further
 				}
 			}
 		}
 		elseif($this->has_wysiwyg($item)) {
 			$this->wysiwyg_items[] = $this->prefix.$item['name'];
-			$this->enqueue = true;
+			$enqueue = true;
 		}
-		
+
 		// enqueue script if necessary and return
-		if($this->enqueue) {
+		if($enqueue) {
 			//wp_enqueue_script('tiny_mce');
 			//wp_enqueue_script('word-count');
 			return true;
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Check an individual item to see if it has WYSIWIG requirments
 	 * Restricted to Textarea items only
@@ -512,7 +518,7 @@ class cf_meta_js extends cf_meta {
 	function has_wysiwyg($item) {
 		return $item['type'] == 'textarea' && isset($item['wysiwyg']) && $item['wysiwyg'] == true;
 	}
-	
+
 	/**
 	 * Add to wysiwyg editor (TinyMCE) init binding
 	 * As seen in a few other plugins... (not written by me)
@@ -520,12 +526,12 @@ class cf_meta_js extends cf_meta {
 	function add_wysiwyg() {
 		echo '
 <script type="text/javascript">
-	jQuery(function($) { 
+	jQuery(function($) {
 		';
 		foreach($this->wysiwyg_items as $item) {
 			echo '
-				CKEDITOR.replace( "'.$item.'",{ 
-					customConfig : "/index.php?cf_meta_action=ckeditor_toolbar_config" 
+				CKEDITOR.replace( "'.$item.'",{
+					customConfig : "/index.php?cf_meta_action=ckeditor_toolbar_config"
 				});
 			';
 		}

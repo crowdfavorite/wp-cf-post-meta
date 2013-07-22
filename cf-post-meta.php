@@ -3,7 +3,7 @@
 Plugin Name: CF Post Meta
 Plugin URI: http://crowdfavorite.com/wordpress/
 Description: CrowdFavorite Post Metadata Manager: Facilitates adding additinal metadata fields to posts through the standard post entry interface. 
-Version: 2.0.2
+Version: 2.0.3
 Author: Crowd Favorite
 Author URI: http://crowdfavorite.com
 */	
@@ -95,16 +95,20 @@ Author URI: http://crowdfavorite.com
 	 */
 	function cf_meta_edit_page() {
 		global $cfmeta,$post;
-		$cfmeta = cf_meta_gimme('page',$post->ID);
-		$cfmeta->display();
+		if (is_object($post)) {
+			$cfmeta = cf_meta_gimme('page',$post->ID);
+			$cfmeta->display();
+		}
 	}
-	
+
 	function cf_meta_edit_custom($type) {
 		global $cfmeta, $post;
-		$cfmeta = cf_meta_gimme($type,$post->ID);
-		$cfmeta->display();
+		if (is_object($post)) {
+			$cfmeta = cf_meta_gimme($type,$post->ID);
+			$cfmeta->display();
+		}
 	}
-	
+
 	/**
 	 * Do the box display code
 	 * @param object $post - the post or page object
@@ -132,11 +136,12 @@ Author URI: http://crowdfavorite.com
 			else if (!empty($_GET['post_type'])) {
 				return htmlentities($_GET['post_type']);
 			}
-			else if (!empty($_POST['post_id']) || !empty($_POST['post_ID'])) {
+			else if (!empty($_POST['post_id'])) {
 				$post_id = get_post_type(intval($_POST['post_id']));
-				if (empty($post_id)) {
-					$post_id = get_post_type(intval($_POST['post_ID']));
-				}
+				return $post_id;
+			}
+			else if (!empty($_POST['post_ID'])) {
+				$post_id = get_post_type(intval($_POST['post_ID']));
 				return $post_id;
 			}
 			else if (empty($_GET['post_type']) && !empty($pagenow) && $pagenow == 'post-new.php') {
@@ -161,7 +166,7 @@ Author URI: http://crowdfavorite.com
 	 * @param object $post - post data object
 	 */
 	function cf_meta_save_post($post_id,$post) {
-		if ($_POST['cf_meta_active']) {
+		if (isset($_POST['cf_meta_active']) && $_POST['cf_meta_active']) {
 			switch ($post->post_type) {
 				case 'revision':
 					return;

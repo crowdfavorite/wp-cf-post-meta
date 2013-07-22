@@ -128,6 +128,7 @@ class cf_meta {
 				// process each input in a set
 				foreach ($set['items'] as $item) {
 					if ($item['type'] == 'block') {
+						$item['prefix'] = $this->prefix;
 						$block = new cf_input_block($item);
 						$block->save();
 					}
