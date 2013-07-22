@@ -213,8 +213,8 @@
 		 */
 		function save_group($post) {
 			$save_array = array();
-			if (isset($post['cf_meta_blocks'][$this->config['name']])) {
-				foreach ($post['cf_meta_blocks'][$this->config['name']] as $value) {
+			if (isset($post[$this->config['prefix'].'blocks'][$this->config['name']])) {
+				foreach ($post[$this->config['prefix'].'blocks'][$this->config['name']] as $value) {
 					// keep items where all values are empty from being saved
 					$control = '';
 					foreach($value as $item) { $control .= $item; }
