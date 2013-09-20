@@ -389,7 +389,7 @@ class cf_meta_js extends cf_meta {
 	 * @return string
 	 */
 	function attribute($identifier, $attribute) {
-		return 'jQuery("'.$identifier.'").attr("'.$attribute.'")';
+		return 'jQuery("'.$identifier.'").prop("'.$attribute.'")';
 	}
 
 	/**
@@ -546,20 +546,19 @@ class cf_meta_js extends cf_meta {
 function cf_meta_ckeditor_toolbar_config() {
 	if(!empty($_GET['cf_meta_action']) && $_GET['cf_meta_action'] == 'ckeditor_toolbar_config') {
 		header('content-type: text/javascript');
-		echo 'CKEDITOR.editorConfig = function( config )
-{
-    config.toolbar = "CFMetaToolbar";
+		echo 'CKEDITOR.editorConfig = function( config ) {
+	config.toolbar = "CFMetaToolbar";
 
-    config.toolbar_CFMetaToolbar =
-    [
-        ["Format"],
-        ["Bold","Italic","Strike"],
-        ["NumberedList","BulletedList","-","Outdent","Indent"],
-        ["Link","Unlink","Image","HorizontalRule","SpecialChar"],
-        ["PasteText","PasteFromWord"],
-        ["Undo","Redo","-","SelectAll","RemoveFormat"],
+	config.toolbar_CFMetaToolbar =
+	[
+		["Format"],
+		["Bold","Italic","Strike"],
+		["NumberedList","BulletedList","-","Outdent","Indent"],
+		["Link","Unlink","Image","HorizontalRule","SpecialChar"],
+		["PasteText","PasteFromWord"],
+		["Undo","Redo","-","SelectAll","RemoveFormat"],
 		["Source"]
-    ];
+	];
 };
 		';
 		exit;

@@ -1,5 +1,8 @@
 # CF-Post-Meta Changelog
 
+## 2.0.4 (in dev)
+- jQuery 10 compatibility for checbox/radio button comparisons
+
 ## 2.0.3
 - Add ability for custom JS in the head of a meta box via filter
 - Fix a few PHP notices that were thrown on edge cases
