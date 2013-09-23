@@ -217,8 +217,10 @@
 				foreach ($post[$this->config['prefix'].'blocks'][$this->config['name']] as $value) {
 					// keep items where all values are empty from being saved
 					$control = '';
-					foreach($value as $item) { $control .= $item; }
-					if(strlen(trim($control)) > 0) { 
+					foreach ($value as $item) {
+						$control .= $item;
+					}
+					if (strlen(trim($control)) > 0) { 
 						$save_array[] = $value;
 					}
 				}
@@ -274,9 +276,9 @@
 		 * verify presence of data and throw any necessary errors
 		 */
 		function save() {
-			if(isset($_POST[$this->get_name()])) {
+			if (isset($_POST[$this->get_name()])) {
 				// check required
-				if($_POST[$this->get_name()] == '' && $this->required) {
+				if ($_POST[$this->get_name()] === '' && $this->required) {
 					$this->error = 'required';
 					return false;
 				}
@@ -285,7 +287,8 @@
 
 				// write to db
 				return $this->save_data($_POST[$this->get_name()]);
-			} else {
+			}
+			else {
 				delete_post_meta($this->post_id,$this->get_name());
 			}
 			return false;
@@ -297,7 +300,7 @@
 		function save_data($value) {
 			$value = apply_filters('cfinput_save_data', $value, $this->config['name'], $this->config);
 			// delete meta entry on empty value
-			if($value == '') { 
+			if ($value === '') { 
 				return delete_post_meta($this->post_id,$this->config['name']); 
 			}
 			else { 
@@ -407,7 +410,7 @@
 					}
 				}
 
-				if(!empty($value)) { 
+				if ($value !== '') { 
 					$this->value = $value; 
 				}
 				else if (!empty($this->config['default_value']) && !in_array($this->config['type'], array('checkbox'))) {

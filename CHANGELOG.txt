@@ -1,7 +1,8 @@
 # CF-Post-Meta Changelog
 
 ## 2.0.4 (in dev)
-- jQuery 10 compatibility for checbox/radio button comparisons
+- jQuery 10 compatibility for checkbox/radio button comparisons
+- An entered value of 0 no longer gets replaced with a default value (an empty string still does)
 
 ## 2.0.3
 - Add ability for custom JS in the head of a meta box via filter
