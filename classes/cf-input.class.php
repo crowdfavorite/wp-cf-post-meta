@@ -58,7 +58,7 @@
 	}
 
 	/**
-	 * Creates a block repeater item
+	 * Creates a block repeater items
 	 * Similar to a set, but each block can expand to hold many items
 	 */
 	class cf_input_block {
@@ -342,7 +342,7 @@
 			$value = ($value) ? $value : $this->get_value();
 			$class = isset($this->config['label']) ? null : 'class="full" ';
 
-			return '<input type="'.$this->config['type'].'" name="'.$this->get_id().'" id="'.$this->get_id().'" value="'.htmlspecialchars($value).'" '.$this->attributes().$class.'/>';
+			return '<input type="'.$this->config['type'].'" name="'.$this->get_id().'" id="'.$this->get_id().'" value="'.esc_attr($value).'" '.$this->attributes().$class.'/>';
 		}
 	
 		function attributes() {
@@ -604,8 +604,44 @@
 	}
 
 	class cf_input_file extends cf_input {
-		function cf_input_text($conf) {
+		function cf_input_file($conf) {
 			return cf_input::cf_input($conf);
+		}
+	}
+	
+	class cf_input_date extends cf_input {
+		function cf_input_date($conf) {
+			// We want to enqueue the jQuery datepicker for this.
+			wp_enqueue_script('jquery-ui-datepicker');
+			// May need to review how we want the jquery ui styles enqueued
+			wp_enqueue_style('jquery-ui', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
+			return cf_input::cf_input($conf);
+		}
+		
+		function get_input() {
+			$output = parent::get_input();
+			$output .= '
+			<script type="text/javascript">
+			jQuery(document).ready(function($) {
+				$("#'.$this->get_id().'").datepicker({
+					"dateFormat": "yy-mm-dd", // This should not be changed, it is set for compatibility with §5.6 of RFC3339 regarding date inputs
+				}).prop("placeholder", "yyyy-mm-dd");
+			});
+			</script>
+			';
+			return $output;
+		}
+		
+		// This clears the meta then resaves if it was passed in. This will also normalize the date format in case, by some method, it was not submitted in yyyy-mm-dd format.
+		function save() {
+			if (empty($_POST[$this->get_name()])) {
+				return delete_post_meta($this->get_name());
+			}
+			else {
+				// Because JS may not have been enabled on the user's system, let's do our best to ensure the submitted date is in the proper format.
+				$meta_value = date('Y-m-d', strtotime($_POST[$this->get_name()]));
+				return update_post_meta($this->config['post_id'], $this->config['name'], $meta_value);
+			}
 		}
 	}
 
