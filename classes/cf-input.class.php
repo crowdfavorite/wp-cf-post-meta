@@ -659,6 +659,7 @@
 				<div class="cf-meta-media-data" style="float:left;">
 					<input type="hidden" name="' . $this->get_name() . '" id="' . $this->get_id() . '" value="' . esc_attr($value) . '" />
 					<button id="'.$this->get_id().'-select-button" style="margin-right:5px;">' . esc_html('Select Image') . '</button>
+					<button id="'.$this->get_id().'-clear-button" style="margin-right:5px;">'.esc_html('Clear').'</button>
 				</div>
 				<div class="cf-meta-media-preview" style="width:150px; min-height:1px; float:left; margin-right: 5px;">
 				';
@@ -680,14 +681,31 @@
 					e.stopPropagation();
 					wp.media.editor.send.attachment = function(props, attachment) {
 						var $input = jQuery("#'.$this->get_id().'");
-						console.log(attachment);
-						$input.val(attachment.id);
+						$input.val(attachment.id).trigger("media-hidden-input-changed");
 						$input.parents(".cf-meta-media-wrapper").find(".cf-meta-media-preview").html("<img src=\""+attachment.url+"\" style=\"width:100%;\" />");
 						wp.media.editor.send.attachment = _old_send_attachment;
 						return _old_send_attachment.apply(this, [props, attachment]);
 					}
 					wp.media.editor.open();
-				})
+				});
+				jQuery("#'.$this->get_id().'-clear-button").on("click", function(e) {
+					var $input = jQuery("#'.$this->get_id().'");
+					e.preventDefault();
+					e.stopPropagation();
+					$input.val("").trigger("media-hidden-input-changed");
+					$input.parents(".cf-meta-media-wrapper").find(".cf-meta-media-preview").html("");
+				});
+				
+				// Hidden inputs don\'t always send normal events, so we\'re triggering a custom event to assure that even in browsers where those events may occur we don\'t have a collision
+				jQuery("#'.$this->get_id().'").on("media-hidden-input-changed", function(e) {
+					var $this = jQuery(this);
+					if ($this.val().length > 0) {
+						jQuery("#"+$this.prop("id")+"-clear-button").show();
+					}
+					else {
+						jQuery("#"+$this.prop("id")+"-clear-button").hide();
+					}
+				}).trigger("media-hidden-input-changed");
 				</script>
 			</div>
 			';
