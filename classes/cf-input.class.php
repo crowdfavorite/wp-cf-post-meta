@@ -644,5 +644,56 @@
 			}
 		}
 	}
+	
+	class cf_input_media extends cf_input {
+		function cf_input_media($conf) {
+			// We would normally enqueue the WordPress media picker here, however it's enqueued for posts and handled anyway.
+			return cf_input::cf_input($conf);
+		}
+		
+		function get_input($value = false) {
+			$value = ($value) ? $value : $this->get_value();
+			
+			$output = '
+			<div class="cf-meta-media-wrapper" style="overflow:hidden;">
+				<div class="cf-meta-media-data" style="float:left;">
+					<input type="hidden" name="' . $this->get_name() . '" id="' . $this->get_id() . '" value="' . esc_attr($value) . '" />
+					<button id="'.$this->get_id().'-select-button" style="margin-right:5px;">' . esc_html('Select Image') . '</button>
+				</div>
+				<div class="cf-meta-media-preview" style="width:150px; min-height:1px; float:left; margin-right: 5px;">
+				';
+			if ($value) {
+				// We might want to actually output a preview image.
+				$attach_url = wp_get_attachment_url($value);
+				if (!empty($attach_url)) {
+					$output .= '
+					<img src="'.esc_url($attach_url).'" style="width:100%;"/>
+					';
+				}
+			}
+			$output .= '
+				</div>
+				<script type="text/javascript">
+				jQuery("#'.$this->get_id().'-select-button").on("click", function(e) {
+					var _old_send_attachment = wp.media.editor.send.attachment;
+					e.preventDefault();
+					e.stopPropagation();
+					wp.media.editor.send.attachment = function(props, attachment) {
+						var $input = jQuery("#'.$this->get_id().'");
+						console.log(attachment);
+						$input.val(attachment.id);
+						$input.parents(".cf-meta-media-wrapper").find(".cf-meta-media-preview").html("<img src=\""+attachment.url+"\" style=\"width:100%;\" />");
+						wp.media.editor.send.attachment = _old_send_attachment;
+						return _old_send_attachment.apply(this, [props, attachment]);
+					}
+					wp.media.editor.open();
+				})
+				</script>
+			</div>
+			';
+			
+			return $output;
+		}
+	}
 
 ?>
