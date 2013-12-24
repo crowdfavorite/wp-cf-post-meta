@@ -1,11 +1,9 @@
 # CF-Post-Meta Changelog
 
-## feature/date-input
-- Adds "date" input type with jQuery UI Datepicker. Validates format for consistency, stores as yyyy-mm-dd in database, allowing easy comparison.
-
 ## 2.0.4 (in dev)
 - jQuery 10 compatibility for checkbox/radio button comparisons
 - An entered value of 0 no longer gets replaced with a default value (an empty string still does)
+- Adds "date" input type with jQuery UI Datepicker. Validates format for consistency, stores as yyyy-mm-dd in database, allowing easy comparison.
 
 ## 2.0.3
 - Add ability for custom JS in the head of a meta box via filter
