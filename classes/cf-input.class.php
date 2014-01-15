@@ -635,7 +635,7 @@
 		// This clears the meta then resaves if it was passed in. This will also normalize the date format in case, by some method, it was not submitted in yyyy-mm-dd format.
 		function save() {
 			if (empty($_POST[$this->get_name()])) {
-				return delete_post_meta($this->get_name());
+				return delete_post_meta($this->config['post_id'], $this->get_name());
 			}
 			else {
 				// Because JS may not have been enabled on the user's system, let's do our best to ensure the submitted date is in the proper format.
