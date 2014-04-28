@@ -41,7 +41,8 @@ function cf_meta_js_wysiwyg_scripts() {
 		$url_base = trailingslashit(plugins_url());
 	}
 
-	$wysiwyg_js_file = 'cf-post-meta/ckeditor/ckeditor.js';
+	// Filter to be able to bypass "cf-post-meta" folder if installed in somewhere else
+	$wysiwyg_js_file = apply_filters('cf_meta_js_wysiwyg_script_file', 'cf-post-meta/ckeditor/ckeditor.js');
 
 	echo '
 		<script type="text/javascript" src="'.apply_filters('cf_meta_wysiwyg_js_url', $url_base.$wysiwyg_js_file, $url_base, $wysiwyg_js_file).'"></script>
