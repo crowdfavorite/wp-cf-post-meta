@@ -27,6 +27,10 @@ add_filter('get_user_option_metaboxhidden_post','cf_meta_metaboxclear',10,3);
 
 
 function cf_meta_js_wysiwyg_scripts() {
+	
+	if ( ( defined( 'CF_POST_META_DISABLE_CKEDITOR' ) ) && ( 'CF_POST_META_DISABLE_CKEDITOR' == true ) ) {
+		return;
+	}
 	$filepath = dirname(realpath(dirname(__FILE__)));
 
 	// plugins_url() is smart enough to handle mu-plugins/ or plugins/

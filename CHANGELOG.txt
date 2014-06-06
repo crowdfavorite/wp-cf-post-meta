@@ -1,5 +1,8 @@
 # CF-Post-Meta Changelog
 
+## 2.0.5
+- Add a bypass contition with a constant to exclude the CKEditor
+
 ## 2.0.4
 - Add filter in cf_meta_js_wysiwyg_scripts() to be able to bypass "cf-post-meta" folder if installed somewhere else 
 
