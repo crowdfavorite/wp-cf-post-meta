@@ -12,7 +12,7 @@ Author URI: http://crowdfavorite.com
 	/**
 	 * Plugin version ID
 	 */
-	define('CF_META_VERSION', '2.0.2');
+	define('CF_META_VERSION', '2.0.5');
 	
 	// PHP < 4.4 hax
 	if(!defined('PHP_EOL')) { define('PHP_EOL',"\n"); }
