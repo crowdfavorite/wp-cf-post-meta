@@ -30,28 +30,27 @@ function cf_meta_js_wysiwyg_scripts() {
 	
 	if ( ( defined( 'CF_POST_META_DISABLE_CKEDITOR' ) ) && ( 'CF_POST_META_DISABLE_CKEDITOR' == true ) ) {
 		return;
-	} else {
-		$filepath = dirname(realpath(dirname(__FILE__)));
+	}
+	$filepath = dirname(realpath(dirname(__FILE__)));
 	
-		// plugins_url() is smart enough to handle mu-plugins/ or plugins/
-		if (preg_match('|wp-content/(mu\-)?plugins|', $filepath)) {
-			$url_base = trailingslashit(plugins_url(null, $filepath));
-		}
-		else if (preg_match('|wp-content/themes|', $filepath)) {
-			$url_base = trailingslashit(get_template_directory_uri()).'plugins/';
-		}
-		else {
-		// just in case we're a symink or something...
-			$url_base = trailingslashit(plugins_url());
-		}
+	// plugins_url() is smart enough to handle mu-plugins/ or plugins/
+	if (preg_match('|wp-content/(mu\-)?plugins|', $filepath)) {
+		$url_base = trailingslashit(plugins_url(null, $filepath));
+	}
+	else if (preg_match('|wp-content/themes|', $filepath)) {
+		$url_base = trailingslashit(get_template_directory_uri()).'plugins/';
+	}
+	else {
+	// just in case we're a symink or something...
+		$url_base = trailingslashit(plugins_url());
+	}
 	
 		// Filter to be able to bypass "cf-post-meta" folder if installed in somewhere else
-		$wysiwyg_js_file = apply_filters('cf_meta_js_wysiwyg_script_file', 'cf-post-meta/ckeditor/ckeditor.js');
+	$wysiwyg_js_file = apply_filters('cf_meta_js_wysiwyg_script_file', 'cf-post-meta/ckeditor/ckeditor.js');
 	
-		echo '
-			<script type="text/javascript" src="'.apply_filters('cf_meta_wysiwyg_js_url', $url_base.$wysiwyg_js_file, $url_base, $wysiwyg_js_file).'"></script>
-			';
-	}
+	echo '
+		<script type="text/javascript" src="'.apply_filters('cf_meta_wysiwyg_js_url', $url_base.$wysiwyg_js_file, $url_base, $wysiwyg_js_file).'"></script>
+		';
 }
 add_action('admin_head','cf_meta_js_wysiwyg_scripts');
 
