@@ -618,7 +618,7 @@
 			return cf_input::cf_input($conf);
 		}
 		
-		function get_input() {
+		function get_input( $value = false ) {
 			$output = parent::get_input();
 			$output .= '
 			<script type="text/javascript">
