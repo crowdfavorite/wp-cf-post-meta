@@ -2,6 +2,8 @@
 
 ## 2.0.5
 - Add a bypass contition with a constant to exclude the CKEditor
+- Corrected reference to constant CF_POST_META_DISABLE_CKEDITOR as string
+- Adjusted cf_input::get_input() to prevent PHP strict error messages
 
 ## 2.0.4
 - Add filter in cf_meta_js_wysiwyg_scripts() to be able to bypass "cf-post-meta" folder if installed somewhere else 

@@ -335,7 +335,7 @@
 			}
 		}
 	
-		function get_input($value=false) {
+		function get_input( $value = false ) {
 			$value = ($value) ? $value : $this->get_value();
 			$class = isset($this->config['label']) ? null : 'class="full" ';
 
@@ -527,7 +527,7 @@
 		/**
 		 * Override the input output
 		 */
-		function get_input() {
+		function get_input( $value = false ) {
 			/**
 			 * setup the tinyMCE wysiwyg on text areas if configed
 			 */
@@ -550,7 +550,7 @@
 		function cf_input_text($conf) {
 			return cf_input::cf_input($conf);
 		}
-		function get_input() {
+		function get_input( $value = false ) {
 			$output = '';
 			if (is_array($this->config['options']) && count($this->config['options'])) {
 				foreach ($this->config['options'] as $k => $v) {
@@ -568,7 +568,7 @@
 			return cf_input::cf_input($conf);
 		}
 		
-		function get_input() {
+		function get_input( $value = false ) {
 			$this->get_value() == $this->get_default_value() ? $checked = ' checked="checked"' : $checked = '';
 			return '<input type="checkbox" class="cf_meta_cb" name="'.$this->get_name().'" id="'.$this->get_id().'" value="'.$this->get_default_value().'"'.$checked.' />';
 		}
@@ -587,7 +587,7 @@
 		function cf_input_text($conf) {
 			return cf_input::cf_input($conf);
 		}
-		function get_input() {
+		function get_input( $value = false ) {
 			$output = '<select name="'.$this->get_name().'" id="'.$this->get_id().'">';
 			if (is_array($this->config['options']) && count($this->config['options'])) {
 				foreach ($this->config['options'] as $k => $v) {
