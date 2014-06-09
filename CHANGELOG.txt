@@ -1,6 +1,6 @@
 # CF-Post-Meta Changelog
 
-## 2.0.5 (dev)
+## 2.0.5
 - Add a bypass contition with a constant to exclude the CKEditor
 - Corrected reference to constant CF_POST_META_DISABLE_CKEDITOR as string
 - Adjusted cf_input::get_input() to prevent PHP strict error messages
