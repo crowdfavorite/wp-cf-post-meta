@@ -6,7 +6,7 @@
 - Adjusted cf_input::get_input() to prevent PHP strict error messages
 
 ## 2.0.4
-- Add filter in cf_meta_js_wysiwyg_scripts() to be able to bypass "cf-post-meta" folder if installed somewhere else
+- Add filter in cf_meta_js_wysiwyg_scripts() to be able to bypass "cf-post-meta" folder if installed somewhere else 
 
 ## 2.0.3
 - Add ability for custom JS in the head of a meta box via filter
@@ -24,7 +24,7 @@
 - Allowing block_class for repeater block group styling.
 
 ## 2.0.1
-- Updated Readme, Changelog to indicate that it was successfully tested on WP3.0.
+- Updated Readme, Changelog to indicate that it was successfully tested on WP3.0. 
 
 ## 2.0
 - Tested on WP3.0
@@ -54,22 +54,22 @@
 ## 1.7
 - Adds support for radio buttons
 
-## 1.6.2
+## 1.6.2 
 - Suppress PHP warning message
 
-## 1.6.1
+## 1.6.1 
 - deprecate `save_as_block` option for repeater elements. Repeater elements always save as block groups. Default is true.
 - Add README & CHANGELOG files to plugin
 - removed sample config file & config example in favor of README.txt
 
-## 1.6
-- Adds support for conditional display of meta boxes.
+## 1.6 
+- Adds support for conditional display of meta boxes. 
 - Meta boxes can be shown or hidden based on a few different values in the page/post edit interface.
-
-## 1.5
-- Adds support for repeater elements.
+	
+## 1.5 
+- Adds support for repeater elements. 
 - Fixes compatability issue with PHP < 4.4
 
-## 1.0
+## 1.0 
 - Initial release
 - Allows the addition of meta boxes to the WordPress page/post edit screen via a simple configuration file or filter.
