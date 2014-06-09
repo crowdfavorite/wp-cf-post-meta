@@ -40,6 +40,7 @@ Adding a meta box to the wordpress page/post edit screen requires little code.
 					'type' => 'text',						// required, input type
 					'before' => '<div class="special">',	// optional, html to put before the field
 					'after' => '</div>',					// optional, html to put after the field
+					'default_value' => 'value'				// optional, an entered empty string will be replaced by this value
 				),
 				// textarea
 				array(
