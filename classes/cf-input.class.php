@@ -84,7 +84,8 @@
 		function make_block_item($data=array()) {
 			// set the defaults to accommodate creating the empty template row
 			$data_defaults = array(
-					'index' => $this->repeater_index_placeholder
+					'index' => $this->repeater_index_placeholder,
+					'split' => false,
 				);
 			$data = array_merge($data_defaults,$data);
 				
@@ -115,6 +116,10 @@
 			$html .= '<a href="#" onclick="delete'.$this->config['name'].'(jQuery(this).parent()); return false;" class="icon delete">Delete</a>'.
 					 '</div>'.
 					 '</fieldset>';
+					
+			if ( !empty($data['split']) ) {
+				return explode($data['split'], $html);
+			}
 			
 			return $html;
 		}
@@ -163,10 +168,13 @@
 			$html .= '</div>'; // this is the end of the .insert_container div
 			
 			// JS for inserting and removing new elements for repeaters
+			// Going to have to be clever here regarding script tags to prevent breaking out of the script element.
 			$html .= '
 				<script type="text/javascript" charset="utf-8">
 					function addAnother'.$this->config['name'].'() {
-						insert_element = \''.str_replace(PHP_EOL,'',trim($this->make_block_item())).'\';
+						var insert_sanitized_array = ' . json_encode( $this->make_block_item( array('split' => 'script') ) ) . ';
+							insert_element = insert_sanitized_array.join("script").replace(/(^[\s]*)|([\s]*$)/, "");
+							
 						insert_element = insert_element.replace(/'.$this->repeater_index_placeholder.'/g, jQuery("#'.$this->config['name'].'").children().length);
 						jQuery(insert_element).appendTo(\'#'.$this->config['name'].'\');
 					}
@@ -653,43 +661,83 @@
 		
 		function get_input($value = false) {
 			$value = ($value) ? $value : $this->get_value();
-			
+			$sanitized_id = sanitize_title($this->get_id());
+			$output = '';
 			$output = '
 			<div class="cf-meta-media-wrapper" style="overflow:hidden;">
+			';
+			$output .= '
 				<div class="cf-meta-media-data" style="float:left;">
-					<input type="hidden" name="' . $this->get_name() . '" id="' . $this->get_id() . '" value="' . esc_attr($value) . '" />
-					<button id="'.$this->get_id().'-select-button" style="margin-right:5px;">' . esc_html('Select Image') . '</button>
-					<button id="'.$this->get_id().'-clear-button" style="margin-right:5px;">'.esc_html('Clear').'</button>
+					<input type="hidden" name="' . $this->get_name() . '" id="' . $sanitized_id . '" value="' . esc_attr($value) . '" />
+					<button id="'. $sanitized_id . '-select-button" style="margin-right:5px;">' . esc_html('Select Media') . '</button>
+					<button id="'. $sanitized_id . '-clear-button" style="margin-right:5px;">'.esc_html('Clear').'</button>
 				</div>
-				<div class="cf-meta-media-preview" style="width:150px; min-height:1px; float:left; margin-right: 5px;">
 				';
 			if ($value) {
 				// We might want to actually output a preview image.
-				$attach_url = wp_get_attachment_url($value);
-				if (!empty($attach_url)) {
+				$media_post = get_post($value);
+				$mime_type = get_post_mime_type($value);
+				if ( !empty($media_post) ) {
+					switch (true) {
+						case preg_match('~^image/~', $mime_type) :
+							$attach_url = wp_get_attachment_url($media_post->ID);
+							$output .= '
+							<div class="cf-meta-media-preview" style="width:150px; min-height:1px; float:left; margin-right: 5px;">
+								<a target="_blank" href="' . esc_url($attach_url) . '"><img src="' . esc_url($attach_url) . '" style="width:100%;" /></a>
+							</div>';
+							break;
+						default : 
+							$attach_url = wp_get_attachment_url($media_post->ID);
+							$filename = preg_replace('~\?.*$~', '', basename($attach_url));
+							$output .= '
+							<div class="cf-meta-media-preview" style="min-height:1px; float:left; margin-right: 5px;">
+								<a target="_blank" href="' . esc_url($attach_url) . '">' . apply_filters( 'the_title', get_the_title($value) ) . '</a> (' . esc_html($filename) . ')
+							</div>
+							';
+					}
+				}
+				else {
 					$output .= '
-					<img src="'.esc_url($attach_url).'" style="width:100%;"/>
+					<div class="cf-meta-media-preview" style="min-height:1px; float:left; margin-right: 5px;">
+					</div>
 					';
 				}
 			}
-			$output .= '
+			else {
+				$output .= '
+				<div class="cf-meta-media-preview" style="min-height:1px; float:left; margin-right: 5px;">
 				</div>
+				';
+			}
+			$output .= '
 				<script type="text/javascript">
-				jQuery("#'.$this->get_id().'-select-button").on("click", function(e) {
+				jQuery("#' . $sanitized_id . '-select-button").on("click", function(e) {
 					var _old_send_attachment = wp.media.editor.send.attachment;
 					e.preventDefault();
 					e.stopPropagation();
 					wp.media.editor.send.attachment = function(props, attachment) {
-						var $input = jQuery("#'.$this->get_id().'");
+						var $input = jQuery("#' . $sanitized_id . '"),
+							isImage = ( attachment.mime.match(/^image\//) !== null ),
+							$wrapper = $input.parents(".cf-meta-media-wrapper").find(".cf-meta-media-preview");
+						console.log(attachment);
+						console.log(props);
 						$input.val(attachment.id).trigger("media-hidden-input-changed");
-						$input.parents(".cf-meta-media-wrapper").find(".cf-meta-media-preview").html("<img src=\""+attachment.url+"\" style=\"width:100%;\" />");
+						if ( isImage ) {
+							$wrapper.css( { "width": "150px", "min-height": "1px", "float": "left", "margin-right": "5px" } );
+							$wrapper.html("<a target=\"_blank\" href=\"" + attachment.url + "\"><img src=\"" + attachment.url + "\" style=\"width:100%;\" /></a>");
+						}
+						else {
+							$wrapper.css( { "width": "", "min-height": "1px", "float": "left", "margin-right": "5px" } );
+							$wrapper.html( "<a target=\"_blank\" href=\"" + attachment.url + "\">" + attachment.title + "</a> (" + attachment.filename + ")" );
+						}
 						wp.media.editor.send.attachment = _old_send_attachment;
-						return _old_send_attachment.apply(this, [props, attachment]);
+						_old_send_attachment.apply(this, [props, attachment]);
+						return ""; // This will be "inserted" into the associated post.
 					}
 					wp.media.editor.open();
 				});
-				jQuery("#'.$this->get_id().'-clear-button").on("click", function(e) {
-					var $input = jQuery("#'.$this->get_id().'");
+				jQuery("#' . $sanitized_id . '-clear-button").on("click", function(e) {
+					var $input = jQuery("#' . $sanitized_id.  '");
 					e.preventDefault();
 					e.stopPropagation();
 					$input.val("").trigger("media-hidden-input-changed");
@@ -697,7 +745,7 @@
 				});
 				
 				// Hidden inputs don\'t always send normal events, so we\'re triggering a custom event to assure that even in browsers where those events may occur we don\'t have a collision
-				jQuery("#'.$this->get_id().'").on("media-hidden-input-changed", function(e) {
+				jQuery("#' . $sanitized_id . '").on("media-hidden-input-changed", function(e) {
 					var $this = jQuery(this);
 					if ($this.val().length > 0) {
 						jQuery("#"+$this.prop("id")+"-clear-button").show();
