@@ -661,16 +661,15 @@
 		
 		function get_input($value = false) {
 			$value = ($value) ? $value : $this->get_value();
-			$sanitized_id = sanitize_title($this->get_id());
 			$output = '';
 			$output = '
 			<div class="cf-meta-media-wrapper" style="overflow:hidden;">
 			';
 			$output .= '
 				<div class="cf-meta-media-data" style="float:left;">
-					<input type="hidden" name="' . $this->get_name() . '" id="' . $sanitized_id . '" value="' . esc_attr($value) . '" />
-					<button id="'. $sanitized_id . '-select-button" style="margin-right:5px;">' . esc_html('Select Media') . '</button>
-					<button id="'. $sanitized_id . '-clear-button" style="margin-right:5px;">'.esc_html('Clear').'</button>
+					<input type="hidden" name="' . $this->get_name() . '" class="cf-meta-media-hidden-value" value="' . esc_attr($value) . '" />
+					<button class="cf-meta-media-select" style="margin-right:5px;">' . esc_html('Select Media') . '</button>
+					<button class="cf-meta-media-clear" style="margin-right:5px;' . ( empty($value)  ? 'display:none;' : '' ) . '">'.esc_html('Clear').'</button>
 				</div>
 				';
 			if ($value) {
@@ -711,50 +710,56 @@
 			}
 			$output .= '
 				<script type="text/javascript">
-				jQuery("#' . $sanitized_id . '-select-button").on("click", function(e) {
-					var _old_send_attachment = wp.media.editor.send.attachment;
-					e.preventDefault();
-					e.stopPropagation();
-					wp.media.editor.send.attachment = function(props, attachment) {
-						var $input = jQuery("#' . $sanitized_id . '"),
-							isImage = ( attachment.mime.match(/^image\//) !== null ),
-							$wrapper = $input.parents(".cf-meta-media-wrapper").find(".cf-meta-media-preview");
-						console.log(attachment);
-						console.log(props);
-						$input.val(attachment.id).trigger("media-hidden-input-changed");
-						if ( isImage ) {
-							$wrapper.css( { "width": "150px", "min-height": "1px", "float": "left", "margin-right": "5px" } );
-							$wrapper.html("<a target=\"_blank\" href=\"" + attachment.url + "\"><img src=\"" + attachment.url + "\" style=\"width:100%;\" /></a>");
-						}
-						else {
-							$wrapper.css( { "width": "", "min-height": "1px", "float": "left", "margin-right": "5px" } );
-							$wrapper.html( "<a target=\"_blank\" href=\"" + attachment.url + "\">" + attachment.title + "</a> (" + attachment.filename + ")" );
-						}
-						wp.media.editor.send.attachment = _old_send_attachment;
-						_old_send_attachment.apply(this, [props, attachment]);
-						return ""; // This will be "inserted" into the associated post.
-					}
-					wp.media.editor.open();
-				});
-				jQuery("#' . $sanitized_id . '-clear-button").on("click", function(e) {
-					var $input = jQuery("#' . $sanitized_id.  '");
-					e.preventDefault();
-					e.stopPropagation();
-					$input.val("").trigger("media-hidden-input-changed");
-					$input.parents(".cf-meta-media-wrapper").find(".cf-meta-media-preview").html("");
-				});
+				window.cfPostMetaMediaHandlerSet = window.cfPostMetaMediaHandlerSet || false;
 				
-				// Hidden inputs don\'t always send normal events, so we\'re triggering a custom event to assure that even in browsers where those events may occur we don\'t have a collision
-				jQuery("#' . $sanitized_id . '").on("media-hidden-input-changed", function(e) {
-					var $this = jQuery(this);
-					if ($this.val().length > 0) {
-						jQuery("#"+$this.prop("id")+"-clear-button").show();
-					}
-					else {
-						jQuery("#"+$this.prop("id")+"-clear-button").hide();
-					}
-				}).trigger("media-hidden-input-changed");
+				if ( !window.cfPostMetaMediaHandlerSet ) {
+					jQuery(document).ready(function() {
+						jQuery("body").on("click", ".cf-meta-media-wrapper .cf-meta-media-select", function(e) {
+							var _old_send_attachment = wp.media.editor.send.attachment,
+								$select = jQuery(e.target);
+							e.preventDefault();
+							e.stopPropagation();
+							wp.media.editor.send.attachment = function(props, attachment) {
+								var $input = $select.closest(".cf-meta-media-wrapper").find(".cf-meta-media-hidden-value"),
+									isImage = ( attachment.mime.match(/^image\//) !== null ),
+									$wrapper = $input.closest(".cf-meta-media-wrapper").find(".cf-meta-media-preview");
+									
+								$input.val(attachment.id).trigger("media-hidden-input-changed");
+								if ( isImage ) {
+									$wrapper.css( { "width": "150px", "min-height": "1px", "float": "left", "margin-right": "5px" } );
+									$wrapper.html("<a target=\"_blank\" href=\"" + attachment.url + "\"><img src=\"" + attachment.url + "\" style=\"width:100%;\" /></a>");
+								}
+								else {
+									$wrapper.css( { "width": "", "min-height": "1px", "float": "left", "margin-right": "5px" } );
+									$wrapper.html( "<a target=\"_blank\" href=\"" + attachment.url + "\">" + attachment.title + "</a> (" + attachment.filename + ")" );
+								}
+								wp.media.editor.send.attachment = _old_send_attachment;
+								_old_send_attachment.apply(this, [props, attachment]);
+								return ""; // This will be "inserted" into the associated post.
+							}
+							wp.media.editor.open();
+						}).on("click", ".cf-meta-media-wrapper .cf-meta-media-clear", function(e) {
+							var $input = jQuery(e.target).closest(".cf-meta-media-wrapper").find(".cf-meta-media-hidden-value");
+							e.preventDefault();
+							e.stopPropagation();
+							$input.val("").trigger("media-hidden-input-changed");
+							$input.parents(".cf-meta-media-wrapper").find(".cf-meta-media-preview").html("");
+						}).on("media-hidden-input-changed", ".cf-meta-media-wrapper .cf-meta-media-hidden-value", function(e) {
+							var $input = jQuery(e.target);
+							
+							if ($input.val().length > 0) {
+								$input.closest(".cf-meta-media-wrapper").find(".cf-meta-media-clear").show();
+							}
+							else {
+								$input.closest(".cf-meta-media-wrapper").find(".cf-meta-media-clear").hide();
+							}
+						});
+					});
+					window.cfPostMetaMediaHandlerSet = true;
+				}
 				</script>
+			';
+			$output .= '
 			</div>
 			';
 			
