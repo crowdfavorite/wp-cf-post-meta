@@ -1,5 +1,8 @@
 # CF-Post-Meta Changelog
 
+## feature/rich-text-input (in dev)
+- Added "rich_edit" input type utilizing WordPress TinyMCE rich text editor.
+
 ## 2.0.5
 - Add a bypass contition with a constant to exclude the CKEditor
 - Corrected reference to constant CF_POST_META_DISABLE_CKEDITOR as string
