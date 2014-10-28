@@ -660,14 +660,13 @@
 		}
 		function get_input( $value = false ){
 			$html = '<div class="clear"></div>';
-			$content = htmlspecialchars( $this->get_value() );
 			$editor_id;
 			$settings = array();
 			$editor_id = str_replace( '&', '', esc_attr( $this->get_name() ) );
 			if( isset( $this->config[ 'default_value' ] ) ) {
 				$content = $this->config[ 'default_value' ];
 			}
-
+			$content = htmlspecialchars( $this->get_value() );
 			/**
 			*	Settings as appears in http://codex.wordpress.org/Function_Reference/wp_editor
 			*		Any user agency over these settings must needs be added.
