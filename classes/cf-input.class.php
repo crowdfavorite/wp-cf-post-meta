@@ -767,4 +767,40 @@
 		}
 	}
 
+	class cf_input_rich_edit extends cf_input {
+		/**
+		*	Cannot yet be used for repeater blocks, as button bar will not be drawn for
+		*	rich text fields beyond the first.
+		*/
+		var $rows = 5;
+
+		function cf_input_textarea( $conf ){
+			if( isset( $conf[ 'rows' ] ) ){
+				$this->rows = $conf[ 'rows' ];
+			}
+			return cf_input::cf_input($conf);
+		}
+		function get_input( $value = false ){
+			$html = '<div class="clear"></div>';
+			$editor_id;
+			$settings = array();
+			$editor_id = str_replace( '&', '', esc_attr( $this->get_name() ) );
+			if( isset( $this->config[ 'default_value' ] ) ) {
+				$content = $this->config[ 'default_value' ];
+			}
+			$content = htmlspecialchars( $this->get_value() );
+			/**
+			*	Settings as appears in http://codex.wordpress.org/Function_Reference/wp_editor
+			*		Any user agency over these settings must needs be added.
+			*/
+			$settings[ 'editor_class' ] = 'cf-meta-rich-edit';
+			$settings[ 'textarea_name' ] = $this->get_name();
+			$settings[ 'textarea_rows' ] = $this->rows;
+			ob_start();
+			wp_editor( $content, $editor_id, $settings );
+			$html .= ob_get_clean();
+			return $html;
+		}
+	}
+
 ?>
