@@ -677,7 +677,6 @@
 			ob_start();
 			wp_editor( $content, $editor_id, $settings );
 			$html .= ob_get_clean();
-			file_put_contents( '/messages/test.txt', $html );
 			return $html;
 		}
 	}
