@@ -85,9 +85,11 @@ Author URI: http://crowdfavorite.com
 	 * Display post editing functions
 	 */
 	function cf_meta_edit_post() {
-		global $cfmeta,$post;
-		$cfmeta = cf_meta_gimme('post',$post->ID);
-		$cfmeta->display();
+		global $cfmeta, $post;
+		if ( ! is_null( $post ) ) {
+			$cfmeta = cf_meta_gimme( 'post', $post->ID );
+			$cfmeta->display();
+		}
 	}
 	
 	/**
