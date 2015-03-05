@@ -31,7 +31,7 @@ function cf_meta_js_wysiwyg_scripts() {
 	if ( ( defined( 'CF_POST_META_DISABLE_CKEDITOR' ) ) && ( CF_POST_META_DISABLE_CKEDITOR == true ) ) {
 		return;
 	}
-	$filepath = dirname(__FILE__) . '/../';//;
+	$filepath = dirname(__FILE__) . '/../';
 	if ( strpos( $filepath, '/wp-content/' ) !== false ) {
 		$url_base = substr( $filepath, strpos( $filepath, '/wp-content/' ) );
 	}
