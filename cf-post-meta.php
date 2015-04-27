@@ -63,7 +63,7 @@ Author URI: http://crowdfavorite.com
 		return (is_admin() && cf_meta_get_type() !== false);
 	}
 	add_filter('cf_meta_actions', 'cf_meta_default_actions', 1);
-	
+
 	/**
 	 * Run in the appropriate context
 	 */
@@ -165,10 +165,16 @@ Author URI: http://crowdfavorite.com
 	 * @param int $post_id - id of the post being operated on
 	 * @param object $post - post data object
 	 */
-	function cf_meta_save_post($post_id,$post) {
-		if (isset($_POST['cf_meta_active']) && $_POST['cf_meta_active']) {
+	function cf_meta_save_post( $post_id, $post ) {
+		if ( isset( $_POST['cf_meta_active'] ) && $_POST['cf_meta_active'] ) {
 			switch ($post->post_type) {
 				case 'revision':
+					$original_post_id = wp_is_post_revision( $post->ID );
+					if ( $original_post_id ) {
+						$post_type = get_post_type( $original_post_id );
+						$cfmeta = cf_meta_gimme( $post_type, $post->ID );
+						$cfmeta->save();
+					}
 					return;
 					break;
 				case 'page':
