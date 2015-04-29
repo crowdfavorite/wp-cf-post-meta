@@ -196,10 +196,10 @@
 		 * Save the block data
 		 * default is to save the entire block as a single post-meta item
 		 */
-		function save() {
+		function save( $preview = false ) {
 			switch ($this->config['process_group']) {
 				case true:
-					$this->save_group($_POST);
+					$this->save_group( $_POST, $preview );
 					break;
 				
 				case false:
@@ -219,7 +219,7 @@
 		 * Save entire block repeater as a single post-meta item
 		 * If all values for a block item are null then the item is not saved
 		 */
-		function save_group($post) {
+		function save_group( $post, $preview = false ) {
 			$save_array = array();
 			if (isset($post[$this->config['prefix'].'blocks'][$this->config['name']])) {
 				foreach ($post[$this->config['prefix'].'blocks'][$this->config['name']] as $value) {
@@ -235,10 +235,13 @@
 				$save_array = apply_filters('cfinput_save_group', $save_array, $this->config['name'], $this->config);
 			}
 			if (count($save_array)) {
-				return update_post_meta($this->config['post_id'],$this->config['name'],$save_array); 
+				$name = ( $preview ) ? '_preview_' . $this->config['name'] : $this->config['name'];
+				$ret = update_post_meta($this->config['post_id'],$name,$save_array);
+				return $ret;
 			}
 			else {
-				return delete_post_meta($this->config['post_id'],$this->config['name']); 
+				$name = ( $preview ) ? '_preview_' . $this->config['name'] : $this->config['name'];
+				return delete_post_meta($this->config['post_id'],$name);
 			}
 		}
 	}
@@ -283,21 +286,20 @@
 		/**
 		 * verify presence of data and throw any necessary errors
 		 */
-		function save() {
+		function save( $preview = false ) {
 			if (isset($_POST[$this->get_name()])) {
 				// check required
 				if ($_POST[$this->get_name()] === '' && $this->required) {
 					$this->error = 'required';
 					return false;
 				}
-
 				// do validation here
 
 				// write to db
-				return $this->save_data($_POST[$this->get_name()]);
-			}
-			else {
-				delete_post_meta($this->post_id,$this->get_name());
+				return $this->save_data($_POST[$this->get_name()], $preview);
+			} else {
+				$name = ( $preview ) ? '_preview_' . $this->get_name() : $this->get_name();
+				delete_post_meta( $this->post_id, $name );
 			}
 			return false;
 		}
@@ -305,14 +307,15 @@
 		/**
 		 * Do save action
 		 */
-		function save_data($value) {
-			$value = apply_filters('cfinput_save_data', $value, $this->config['name'], $this->config);
+		function save_data( $value, $preview ) {
+			$name = ( $preview ) ? '_preview_' . $this->config['name'] : $this->config['name'];
+			$value = apply_filters('cfinput_save_data', $value, $name, $this->config);
 			// delete meta entry on empty value
 			if ($value === '') { 
-				return delete_post_meta($this->post_id,$this->config['name']); 
+				return delete_post_meta($this->post_id,$name);
 			}
-			else { 
-				return update_post_meta($this->post_id,$this->config['name'],$value); 
+			else {
+				return update_post_meta($this->post_id,$name,$value);
 			}
 		}
 		

@@ -30,10 +30,14 @@ class cf_meta {
 	 */
 	var $post_id;
 
+	var $preview_fields;
+
 	/**
 	 * Construct - take the config array and prep for operation
 	 */
 	function cf_meta($config,$post_id) {
+		$this->preview_fields = array();
+
 		$this->post_id = $post_id;
 		if(is_array($config)) { 
 			$this->set_config($config); 
@@ -66,6 +70,7 @@ class cf_meta {
 	 */
 	function set_config($config) {
 		$this->config = array();
+		$this->preview_fields = array();
 		// loop through config and keep on relevant entries
 		$config = apply_filters('cf_meta_config', $config);
 		if (count($config)) {
@@ -76,7 +81,7 @@ class cf_meta {
 				
 				// assign this type to any config items that came in with both types as possibilities
 				if(is_array($conf['type'])) { $conf['type'] = $this->type; }
-				
+
 				// do type validation here - make sure everybody required is present and accounted for
 				$conf['prefix'] = $this->prefix;
 				$conf['post_id'] = $this->post_id;
@@ -84,6 +89,9 @@ class cf_meta {
 				foreach($conf['items'] as $key => $item) {
 					$item['post_id'] = $this->post_id;
 					$conf['items'][$key] = $item;
+					if ( isset ( $item['name'] ) ) {
+						$this->preview_fields[] = $item['name'];
+					}
 				}
 				$this->config[$conf['id']] = $conf;
 			}
@@ -120,7 +128,7 @@ class cf_meta {
 	/**
 	 * Process incoming post data
 	 */
-	function save() {
+	function save( $preview = false ) {
 		// loop through sets
 		$config = apply_filters('cf_meta_save_config', $this->config);
 		if (count($config)) {
@@ -130,7 +138,7 @@ class cf_meta {
 					if ($item['type'] == 'block') {
 						$item['prefix'] = $this->prefix;
 						$block = new cf_input_block($item);
-						$block->save();
+						$block->save( $preview );
 					}
 					else {
 						if (!class_exists('cf_input_'.$item['type'])) { continue; }
@@ -138,7 +146,7 @@ class cf_meta {
 						$type = 'cf_input_'.$item['type'];
 						
 						$item = new $type($item); 
-						if (!$item->save()) {
+						if (!$item->save( $preview )) {
 							// process errors
 							if ($item->error) {
 								$item_save_error = "<h5 style=\"color:brown\">error on $item->save</h5>";

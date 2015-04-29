@@ -6,7 +6,9 @@ Description: CrowdFavorite Post Metadata Manager: Facilitates adding additinal m
 Version: 2.0.5
 Author: Crowd Favorite
 Author URI: http://crowdfavorite.com
-*/	
+*/
+
+
 /* Tested back to PHP 4.4.7 & up to PHP 5.3.5 */
 	
 	/**
@@ -29,6 +31,17 @@ Author URI: http://crowdfavorite.com
 	}
 	add_action('init','cf_meta_request_handler');
 
+add_filter( '_wp_post_revision_fields', 'add_field_debug_preview' );
+function add_field_debug_preview( $fields ){
+   $fields['meta_preview'] = 'meta_preview';
+   return $fields;
+}
+
+add_action( 'edit_form_after_title', 'add_input_meta_preview' );
+function add_input_meta_preview() {
+   echo '<input type="hidden" name="meta_preview" value="' . esc_attr( rand() ) . '">';
+}
+
 	/**
 	 * Get required files
 	 */
@@ -40,7 +53,8 @@ Author URI: http://crowdfavorite.com
 	require_once(CF_META_PLUGIN_DIR.'classes/cf-meta-js.class.php');
 	require_once(CF_META_PLUGIN_DIR.'classes/cf-meta-types.class.php');
 	require_once(CF_META_PLUGIN_DIR.'classes/cf-input-settings-types.class.php');
-	
+	require_once(CF_META_PLUGIN_DIR.'classes/cf-meta-preview.class.php');
+
 	function cf_meta_actions() {
 		/**
 		 * assign post actions
@@ -125,10 +139,10 @@ Author URI: http://crowdfavorite.com
 	 */
 	function cf_meta_get_type() {
 		global $post, $pagenow;
-		
+
 		// We aren't going to do anything with this outside of the admin
 		if (!is_admin()) { return false; }
-		
+
 		if (empty($post) || is_null($post)) {
 			if (!empty($_GET['post']) && $_GET['post'] != 0) {
 				return get_post_type(intval($_GET['post']));
@@ -169,11 +183,13 @@ Author URI: http://crowdfavorite.com
 		if ( isset( $_POST['cf_meta_active'] ) && $_POST['cf_meta_active'] ) {
 			switch ($post->post_type) {
 				case 'revision':
+					//return;
 					$original_post_id = wp_is_post_revision( $post->ID );
 					if ( $original_post_id ) {
 						$post_type = get_post_type( $original_post_id );
 						$cfmeta = cf_meta_gimme( $post_type, $post->ID );
-						$cfmeta->save();
+						$preview = true;
+						$cfmeta->save( $preview );
 					}
 					return;
 					break;
