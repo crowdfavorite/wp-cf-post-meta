@@ -42,12 +42,10 @@ class cf_meta_preview {
 		// call original function but make sure we don't get stuck in a loop
 		$this->doing_preview = true;
 
-		//$preview_metafields[] = 'related_content_title';
-		/*
 		$cfmeta = cf_meta_gimme( $post->post_type, $post->ID );
 		if ( $cfmeta ) {
 			$preview_metafields = $cfmeta->preview_fields;
-		}*/
+		}
 
 		if ( isset( $preview_metafields ) && is_array( $preview_metafields ) && in_array( $args[ 2 ], $preview_metafields ) ) {
 			$args[ 2 ] = $this->mod_key( $args[ 2 ] );

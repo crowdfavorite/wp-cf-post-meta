@@ -31,16 +31,16 @@ Author URI: http://crowdfavorite.com
 	}
 	add_action('init','cf_meta_request_handler');
 
-add_filter( '_wp_post_revision_fields', 'add_field_debug_preview' );
-function add_field_debug_preview( $fields ){
-   $fields['meta_preview'] = 'meta_preview';
-   return $fields;
-}
+	add_filter( '_wp_post_revision_fields', 'cf_meta_add_field_preview' );
+	function cf_meta_add_field_preview( $fields ){
+	   $fields['meta_preview'] = 'meta_preview';
+	   return $fields;
+	}
 
-add_action( 'edit_form_after_title', 'add_input_meta_preview' );
-function add_input_meta_preview() {
-   echo '<input type="hidden" name="meta_preview" value="' . esc_attr( rand() ) . '">';
-}
+	add_action( 'edit_form_after_title', 'cf_meta_add_input_meta_preview' );
+	function cf_meta_add_input_meta_preview() {
+	   echo '<input type="hidden" name="meta_preview" value="' . esc_attr( rand() ) . '">';
+	}
 
 	/**
 	 * Get required files

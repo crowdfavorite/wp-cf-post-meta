@@ -235,12 +235,12 @@
 				$save_array = apply_filters('cfinput_save_group', $save_array, $this->config['name'], $this->config);
 			}
 			if (count($save_array)) {
-				$name = ( $preview ) ? '_preview_' . $this->config['name'] : $this->config['name'];
+				$name = ( $preview ) ? '_preview__' . $this->config['name'] : $this->config['name'];
 				$ret = update_post_meta($this->config['post_id'],$name,$save_array);
 				return $ret;
 			}
 			else {
-				$name = ( $preview ) ? '_preview_' . $this->config['name'] : $this->config['name'];
+				$name = ( $preview ) ? '_preview__' . $this->config['name'] : $this->config['name'];
 				return delete_post_meta($this->config['post_id'],$name);
 			}
 		}
@@ -298,7 +298,7 @@
 				// write to db
 				return $this->save_data($_POST[$this->get_name()], $preview);
 			} else {
-				$name = ( $preview ) ? '_preview_' . $this->get_name() : $this->get_name();
+				$name = ( $preview ) ? '_preview__' . $this->get_name() : $this->get_name();
 				delete_post_meta( $this->post_id, $name );
 			}
 			return false;
@@ -308,7 +308,7 @@
 		 * Do save action
 		 */
 		function save_data( $value, $preview ) {
-			$name = ( $preview ) ? '_preview_' . $this->config['name'] : $this->config['name'];
+			$name = ( $preview ) ? '_preview__' . $this->config['name'] : $this->config['name'];
 			$value = apply_filters('cfinput_save_data', $value, $name, $this->config);
 			// delete meta entry on empty value
 			if ($value === '') { 
