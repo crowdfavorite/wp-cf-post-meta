@@ -94,7 +94,7 @@ class cf_meta_js extends cf_meta {
 	 * @param array $conditions
 	 * @return bool
 	 */
-	function cf_meta_js($config,$post_id) {
+	function __construct( $config, $post_id ) {
 		cf_meta::cf_meta($config,$post_id);
 		wp_enqueue_script('jquery');
 		$this->inverted = array(
