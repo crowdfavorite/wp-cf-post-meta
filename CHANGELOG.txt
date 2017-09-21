@@ -1,5 +1,16 @@
 # CF-Post-Meta Changelog
 
+## 2.0.5
+- Add a bypass contition with a constant to exclude the CKEditor
+- Corrected reference to constant CF_POST_META_DISABLE_CKEDITOR as string
+- Adjusted cf_input::get_input() to prevent PHP strict error messages
+
+## 2.0.4
+- Add filter in cf_meta_js_wysiwyg_scripts() to be able to bypass "cf-post-meta" folder if installed somewhere else 
+- jQuery 10 compatibility for checkbox/radio button comparisons
+- An entered value of 0 no longer gets replaced with a default value (an empty string still does)
+- Adds "date" input type with jQuery UI Datepicker. Validates format for consistency, stores as yyyy-mm-dd in database, allowing easy comparison.
+
 ## 2.0.3
 - Add ability for custom JS in the head of a meta box via filter
 - Fix a few PHP notices that were thrown on edge cases

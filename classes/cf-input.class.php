@@ -58,7 +58,7 @@
 	}
 
 	/**
-	 * Creates a block repeater item
+	 * Creates a block repeater items
 	 * Similar to a set, but each block can expand to hold many items
 	 */
 	class cf_input_block {
@@ -217,8 +217,10 @@
 				foreach ($post[$this->config['prefix'].'blocks'][$this->config['name']] as $value) {
 					// keep items where all values are empty from being saved
 					$control = '';
-					foreach($value as $item) { $control .= $item; }
-					if(strlen(trim($control)) > 0) { 
+					foreach ($value as $item) {
+						$control .= $item;
+					}
+					if (strlen(trim($control)) > 0) { 
 						$save_array[] = $value;
 					}
 				}
@@ -274,9 +276,9 @@
 		 * verify presence of data and throw any necessary errors
 		 */
 		function save() {
-			if(isset($_POST[$this->get_name()])) {
+			if (isset($_POST[$this->get_name()])) {
 				// check required
-				if($_POST[$this->get_name()] == '' && $this->required) {
+				if ($_POST[$this->get_name()] === '' && $this->required) {
 					$this->error = 'required';
 					return false;
 				}
@@ -285,7 +287,8 @@
 
 				// write to db
 				return $this->save_data($_POST[$this->get_name()]);
-			} else {
+			}
+			else {
 				delete_post_meta($this->post_id,$this->get_name());
 			}
 			return false;
@@ -297,7 +300,7 @@
 		function save_data($value) {
 			$value = apply_filters('cfinput_save_data', $value, $this->config['name'], $this->config);
 			// delete meta entry on empty value
-			if($value == '') { 
+			if ($value === '') { 
 				return delete_post_meta($this->post_id,$this->config['name']); 
 			}
 			else { 
@@ -335,11 +338,11 @@
 			}
 		}
 	
-		function get_input($value=false) {
+		function get_input( $value = false ) {
 			$value = ($value) ? $value : $this->get_value();
 			$class = isset($this->config['label']) ? null : 'class="full" ';
 
-			return '<input type="'.$this->config['type'].'" name="'.$this->get_id().'" id="'.$this->get_id().'" value="'.htmlspecialchars($value).'" '.$this->attributes().$class.'/>';
+			return '<input type="'.$this->config['type'].'" name="'.$this->get_id().'" id="'.$this->get_id().'" value="'.esc_attr($value).'" '.$this->attributes().$class.'/>';
 		}
 	
 		function attributes() {
@@ -407,7 +410,7 @@
 					}
 				}
 
-				if(!empty($value)) { 
+				if ($value !== '') { 
 					$this->value = $value; 
 				}
 				else if (!empty($this->config['default_value']) && !in_array($this->config['type'], array('checkbox'))) {
@@ -527,7 +530,8 @@
 		/**
 		 * Override the input output
 		 */
-		function get_input( $value = null ) {
+
+		function get_input( $value = false ) {
 			/**
 			 * setup the tinyMCE wysiwyg on text areas if configed
 			 */
@@ -603,8 +607,44 @@
 	}
 
 	class cf_input_file extends cf_input {
-		function cf_input_text($conf) {
+		function cf_input_file($conf) {
 			return cf_input::cf_input($conf);
+		}
+	}
+	
+	class cf_input_date extends cf_input {
+		function cf_input_date($conf) {
+			// We want to enqueue the jQuery datepicker for this.
+			wp_enqueue_script('jquery-ui-datepicker');
+			// May need to review how we want the jquery ui styles enqueued
+			wp_enqueue_style('jquery-ui', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
+			return cf_input::cf_input($conf);
+		}
+		
+		function get_input( $value = false ) {
+			$output = parent::get_input();
+			$output .= '
+			<script type="text/javascript">
+			jQuery(document).ready(function($) {
+				$("#'.$this->get_id().'").datepicker({
+					"dateFormat": "yy-mm-dd", // This should not be changed, it is set for compatibility with §5.6 of RFC3339 regarding date inputs
+				}).prop("placeholder", "yyyy-mm-dd");
+			});
+			</script>
+			';
+			return $output;
+		}
+		
+		// This clears the meta then resaves if it was passed in. This will also normalize the date format in case, by some method, it was not submitted in yyyy-mm-dd format.
+		function save() {
+			if (empty($_POST[$this->get_name()])) {
+				return delete_post_meta($this->config['post_id'], $this->get_name());
+			}
+			else {
+				// Because JS may not have been enabled on the user's system, let's do our best to ensure the submitted date is in the proper format.
+				$meta_value = date('Y-m-d', strtotime($_POST[$this->get_name()]));
+				return update_post_meta($this->config['post_id'], $this->config['name'], $meta_value);
+			}
 		}
 	}
 
