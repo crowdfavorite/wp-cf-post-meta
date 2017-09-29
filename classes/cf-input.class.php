@@ -253,7 +253,7 @@
 		 * Basic constructor
 		 * @var array $conf - config array for this element
 		 */
-		function __construct( $conf ) {
+		function cf_input($conf) {
 			// require name
 			if(!isset($conf['name'])) { return false; }
 			if(!isset($conf['key_name'])) { $conf['key_name'] = $conf['name']; }
@@ -477,7 +477,7 @@
 	 * Text input - no overrides
 	 */
 	class cf_input_text extends cf_input {
-		function __construct( $conf ) {
+		function cf_input_text($conf) {
 			return cf_input::cf_input($conf);
 		}
 	}
@@ -486,7 +486,7 @@
 	 * Hidden Input
 	 */
 	class cf_input_hidden extends cf_input {
-		function __construct( $conf ) {
+		function cf_input_hidden($conf) {
 			return cf_input::cf_input($conf);
 		}
 		
@@ -513,8 +513,8 @@
 	class cf_input_textarea extends cf_input  {
 		var $cols = 40;
 		var $rows = 1;
-
-		function __construct( $conf ) {
+		
+		function cf_input_textarea($conf) {
 			if(isset($conf['cols'])) { $this->cols = $conf['cols']; }
 			if(isset($conf['rows'])) { $this->rows = $conf['rows']; }
 			return cf_input::cf_input($conf);
@@ -530,7 +530,6 @@
 		/**
 		 * Override the input output
 		 */
-
 		function get_input( $value = false ) {
 			/**
 			 * setup the tinyMCE wysiwyg on text areas if configed
@@ -554,7 +553,6 @@
 		function cf_input_text($conf) {
 			return cf_input::cf_input($conf);
 		}
-
 		function get_input( $value = false ) {
 			$output = '';
 			if (is_array($this->config['options']) && count($this->config['options'])) {
@@ -572,12 +570,12 @@
 		function cf_input_text($conf) {
 			return cf_input::cf_input($conf);
 		}
-
+		
 		function get_input( $value = false ) {
 			$this->get_value() == $this->get_default_value() ? $checked = ' checked="checked"' : $checked = '';
 			return '<input type="checkbox" class="cf_meta_cb" name="'.$this->get_name().'" id="'.$this->get_id().'" value="'.$this->get_default_value().'"'.$checked.' />';
 		}
-
+		
 		// this removes the post_meta altogether if there isn't a value present in the $_POST array, thereby allowing unchecked boxes to save.
 		function save() {
 			if (empty($_POST[$this->get_name()])) {
@@ -592,7 +590,6 @@
 		function cf_input_text($conf) {
 			return cf_input::cf_input($conf);
 		}
-
 		function get_input( $value = false ) {
 			$output = '<select name="'.$this->get_name().'" id="'.$this->get_id().'">';
 			if (is_array($this->config['options']) && count($this->config['options'])) {
