@@ -15,10 +15,10 @@ class cf_page_meta extends cf_meta_js {
 	}
 
 	/**
-	 * Added support for php 5.3-.
+	 * Added support for php <5.3.
 	 *
-	 * @param array   $config   Config array for this element.
-	 * @param integer $post_id  Id for this element.
+	 * @param array   $config  Config array for this element.
+	 * @param integer $post_id Id for this element.
 	 *
 	 * @return __construct
 	 */
@@ -42,10 +42,10 @@ class cf_post_meta extends cf_meta_js {
 	}
 
 	/**
-	 * Added support for php 5.3-.
+	 * Added support for php <5.3.
 	 *
-	 * @param array   $config   Config array for this element.
-	 * @param integer $post_id  Id for this element.
+	 * @param array   $config  Config array for this element.
+	 * @param integer $post_id Id for this element.
 	 *
 	 * @return cf_post_meta
 	 */
@@ -67,11 +67,11 @@ class cf_custom_meta extends cf_meta_js {
 	}
 
 	/**
-	 * Added support for php 5.3-.
+	 * Added support for php <5.3.
 	 *
-	 * @param array    $config   Config array for this element.
-	 * @param integer  $post_id  Id for this element.
-	 * @param string   $type     Type string for this element.
+	 * @param array    $config  Config array for this element.
+	 * @param integer  $post_id Id for this element.
+	 * @param string   $type    Type string for this element.
 	 *
 	 * @return __construct
 	 */

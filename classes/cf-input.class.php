@@ -273,9 +273,9 @@
 		}
 
 		/**
-		 * Added support for php 5.3-.
+		 * Added support for php <5.3.
 		 *
-		 * @param array $conf  Config array for this element.
+		 * @param array $conf Config array for this element.
 		 *
 		 * @return mixed
 		 */
@@ -493,9 +493,9 @@
 		}
 
 		/**
-		 * Added support for php 5.3-.
+		 * Added support for php <5.3.
 		 *
-		 * @param array $conf  Config array for this element.
+		 * @param array $conf Config array for this element.
 		 *
 		 * @return cf_input
 		 */
@@ -513,9 +513,9 @@
 		}
 
 		/**
-		 * Added support for php 5.3-.
+		 * Added support for php <5.3.
 		 *
-		 * @param array $conf  Config array for this element.
+		 * @param array $conf Config array for this element.
 		 *
 		 * @return cf_input
 		 */
@@ -559,9 +559,9 @@
 		}
 
 		/**
-		 * Added support for php 5.3-.
+		 * Added support for php <5.3.
 		 *
-		 * @param array $conf  Config array for this element.
+		 * @param array $conf Config array for this element.
 		 *
 		 * @return mixed
 		 */
