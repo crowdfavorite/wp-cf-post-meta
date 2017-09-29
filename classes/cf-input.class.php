@@ -252,7 +252,8 @@
 		/**
 		 * Constructor.
 		 */
-		public function __construct() {}
+		public function __construct() {
+		}
 	
 		/**
 		 * Basic constructor
@@ -486,7 +487,8 @@
 		/**
 		 * Constructor.
 		 */
-		public function __construct() {}
+		public function __construct() {
+		}
 
 		function cf_input_text($conf) {
 			return cf_input::cf_input($conf);
@@ -501,7 +503,8 @@
 		/**
 		 * Constructor.
 		 */
-		public function __construct() {}
+		public function __construct() {
+		}
 
 		function cf_input_hidden($conf) {
 			return cf_input::cf_input($conf);
@@ -523,7 +526,8 @@
 		/**
 		 * Constructor.
 		 */
-		public function __construct() {}
+		public function __construct() {
+		}
 
 		function cf_input_text($conf) {
 			return cf_input::cf_input($conf);
@@ -540,7 +544,8 @@
 		/**
 		 * Constructor.
 		 */
-		public function __construct() {}
+		public function __construct() {
+		}
 		
 		function cf_input_textarea($conf) {
 			if(isset($conf['cols'])) { $this->cols = $conf['cols']; }
@@ -582,7 +587,8 @@
 		/**
 		 * Constructor.
 		 */
-		public function __construct() {}
+		public function __construct() {
+		}
 
 		function cf_input_text($conf) {
 			return cf_input::cf_input($conf);
@@ -604,7 +610,8 @@
 		/**
 		 * Constructor.
 		 */
-		public function __construct() {}
+		public function __construct() {
+		}
 
 		function cf_input_text($conf) {
 			return cf_input::cf_input($conf);
@@ -630,7 +637,8 @@
 		/**
 		 * Constructor.
 		 */
-		public function __construct() {}
+		public function __construct() {
+		}
 
 		function cf_input_text($conf) {
 			return cf_input::cf_input($conf);
@@ -653,7 +661,8 @@
 		/**
 		 * Constructor.
 		 */
-		public function __construct() {}
+		public function __construct() {
+		}
 
 		function cf_input_file($conf) {
 			return cf_input::cf_input($conf);
@@ -665,7 +674,8 @@
 		/**
 		 * Constructor.
 		 */
-		public function __construct() {}
+		public function __construct() {
+		}
 
 		function cf_input_date($conf) {
 			// We want to enqueue the jQuery datepicker for this.

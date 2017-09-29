@@ -33,7 +33,8 @@ class cf_meta {
 	/**
 	 * Constructor.
 	 */
-	public function __construct() {}
+	public function __construct() {
+	}
 
 	/**
 	 * Construct - take the config array and prep for operation

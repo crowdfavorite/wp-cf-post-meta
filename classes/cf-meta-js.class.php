@@ -90,7 +90,8 @@ class cf_meta_js extends cf_meta {
 	/**
 	 * Constructor.
 	 */
-	public function __construct() {}
+	public function __construct() {
+	}
 
 	/**
 	 * Construct

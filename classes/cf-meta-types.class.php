@@ -10,7 +10,8 @@ class cf_page_meta extends cf_meta_js {
 	/**
 	 * Constructor.
 	 */
-	public function __construct() {}
+	public function __construct() {
+	}
 
 	/**
 	 * Construct
@@ -30,7 +31,8 @@ class cf_post_meta extends cf_meta_js {
 	/**
 	 * Constructor.
 	 */
-	public function __construct() {}
+	public function __construct() {
+	}
 
 	/**
 	 * Construct
@@ -47,7 +49,8 @@ class cf_custom_meta extends cf_meta_js {
 	/**
 	 * Constructor.
 	 */
-	public function __construct() {}
+	public function __construct() {
+	}
 
 	/**
 	 * Construct
