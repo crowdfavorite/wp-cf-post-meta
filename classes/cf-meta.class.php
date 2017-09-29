@@ -33,7 +33,7 @@ class cf_meta {
 	/**
 	 * Construct - take the config array and prep for operation
 	 */
-	function __construct( $config, $post_id ) {
+	function cf_meta($config,$post_id) {
 		$this->post_id = $post_id;
 		if(is_array($config)) { 
 			$this->set_config($config); 

@@ -8,7 +8,7 @@
 * Extension of the basic cf_input_block class
 */
 class cfs_input_block extends cf_input_block {
-	function __construct( $conf ) {
+	function cfs_input_block($conf) {
 		return cf_input_block::cf_input_block($conf);
 	}
 
