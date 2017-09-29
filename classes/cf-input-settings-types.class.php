@@ -13,9 +13,9 @@ class cfs_input_block extends cf_input_block {
 	}
 
 	/**
-	 * Added support for php 5.3-
+	 * Added support for php 5.3-.
 	 *
-	 * @param $conf
+	 * @param array $conf  Config array for this element.
 	 *
 	 * @return cf_input_block
 	 */
