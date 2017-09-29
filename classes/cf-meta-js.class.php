@@ -113,6 +113,18 @@ class cf_meta_js extends cf_meta {
 	}
 
 	/**
+	 * Added support for php <5.3.
+	 *
+	 * @param array   $config  Config array for this element.
+	 * @param integer $post_id Id for this element.
+	 *
+	 * @return __construct
+	 */
+	function cf_meta_js( $config, $post_id ) {
+		return parent::__construct( $config, $post_id );
+	}
+
+	/**
 	 * Extend the set config function
 	 *
 	 * @param array $config

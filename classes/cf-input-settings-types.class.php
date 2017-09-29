@@ -9,7 +9,18 @@
 */
 class cfs_input_block extends cf_input_block {
 	function __construct( $conf ) {
-		return cf_input_block::cf_input_block($conf);
+		return cf_input_block::cf_input_block( $conf );
+	}
+
+	/**
+	 * Added support for php <5.3.
+	 *
+	 * @param array $conf Config array for this element.
+	 *
+	 * @return cf_input_block
+	 */
+	function cfs_input_block( $conf ) {
+		return parent::__construct( $conf );
 	}
 
 	function display() {

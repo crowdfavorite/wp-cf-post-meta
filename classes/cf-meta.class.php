@@ -41,6 +41,18 @@ class cf_meta {
 		else { 
 			$this->import_config($config); 
 		}
+
+		/**
+		 * Added support for php <5.3.
+		 *
+		 * @param array $config  Config array for this element.
+		 * @param array $post_id Id for this element.
+		 *
+		 * @return mixed
+		 */
+		function cf_meta( $config, $post_id ) {
+			return self::__construct( $config, $post_id );
+		}
 	}
 
 	/**

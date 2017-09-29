@@ -271,6 +271,17 @@
 			$this->value = $this->get_value();
 			return true;
 		}
+
+		/**
+		 * Added support for php <5.3.
+		 *
+		 * @param array $conf Config array for this element.
+		 *
+		 * @return mixed
+		 */
+		function cf_input( $conf ) {
+			return self::__construct( $conf );
+		}
 		
 		/**
 		 * verify presence of data and throw any necessary errors
@@ -480,6 +491,17 @@
 		function __construct( $conf ) {
 			return cf_input::cf_input($conf);
 		}
+
+		/**
+		 * Added support for php <5.3.
+		 *
+		 * @param array $conf Config array for this element.
+		 *
+		 * @return cf_input
+		 */
+		function cf_input_text( $conf ) {
+			return parent::__construct( $conf );
+		}
 	}
 	
 	/**
@@ -489,7 +511,18 @@
 		function __construct( $conf ) {
 			return cf_input::cf_input($conf);
 		}
-		
+
+		/**
+		 * Added support for php <5.3.
+		 *
+		 * @param array $conf Config array for this element.
+		 *
+		 * @return cf_input
+		 */
+		function cf_input_hidden( $conf ) {
+			return parent::__construct( $conf );
+		}
+
 		/**
 		 * hidden inputs will always use the given value in the config
 		 */
@@ -515,10 +548,26 @@
 		var $rows = 1;
 
 		function __construct( $conf ) {
-			if(isset($conf['cols'])) { $this->cols = $conf['cols']; }
-			if(isset($conf['rows'])) { $this->rows = $conf['rows']; }
-			return cf_input::cf_input($conf);
-		}	
+			if ( isset( $conf['cols'] ) ) {
+				$this->cols = $conf['cols'];
+			}
+			if ( isset( $conf['rows'] ) ) {
+				$this->rows = $conf['rows'];
+			}
+
+			return cf_input::__construct( $conf );
+		}
+
+		/**
+		 * Added support for php <5.3.
+		 *
+		 * @param array $conf Config array for this element.
+		 *
+		 * @return mixed
+		 */
+		function cf_input_textarea( $conf ) {
+			return self::__construct( $conf );
+		}
 	
 		function get_label($class) {
 			if(isset($this->config['wysiwyg']) && $this->config['wysiwyg'] == true) {
