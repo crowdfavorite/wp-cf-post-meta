@@ -88,6 +88,11 @@ class cf_meta_js extends cf_meta {
 	var $comparison_funcs = array();
 
 	/**
+	 * Constructor.
+	 */
+	public function __construct() {}
+
+	/**
 	 * Construct
 	 * Set the internal conditions value as well as a comparison inversion chart
 	 *

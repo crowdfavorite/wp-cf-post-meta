@@ -248,6 +248,11 @@
 		var $post_id;
 		var $error;
 		var $required = false;
+
+		/**
+		 * Constructor.
+		 */
+		public function __construct() {}
 	
 		/**
 		 * Basic constructor
@@ -477,6 +482,12 @@
 	 * Text input - no overrides
 	 */
 	class cf_input_text extends cf_input {
+
+		/**
+		 * Constructor.
+		 */
+		public function __construct() {}
+
 		function cf_input_text($conf) {
 			return cf_input::cf_input($conf);
 		}
@@ -486,6 +497,12 @@
 	 * Hidden Input
 	 */
 	class cf_input_hidden extends cf_input {
+
+		/**
+		 * Constructor.
+		 */
+		public function __construct() {}
+
 		function cf_input_hidden($conf) {
 			return cf_input::cf_input($conf);
 		}
@@ -502,6 +519,12 @@
 	 * Password input - no overrides
 	 */
 	class cf_input_password extends cf_input {
+
+		/**
+		 * Constructor.
+		 */
+		public function __construct() {}
+
 		function cf_input_text($conf) {
 			return cf_input::cf_input($conf);
 		}
@@ -513,6 +536,11 @@
 	class cf_input_textarea extends cf_input  {
 		var $cols = 40;
 		var $rows = 1;
+
+		/**
+		 * Constructor.
+		 */
+		public function __construct() {}
 		
 		function cf_input_textarea($conf) {
 			if(isset($conf['cols'])) { $this->cols = $conf['cols']; }
@@ -550,6 +578,12 @@
 	}
 	
 	class cf_input_radio extends cf_input  {
+
+		/**
+		 * Constructor.
+		 */
+		public function __construct() {}
+
 		function cf_input_text($conf) {
 			return cf_input::cf_input($conf);
 		}
@@ -566,7 +600,12 @@
 	}
 
 	class cf_input_checkbox extends cf_input {
-		
+
+		/**
+		 * Constructor.
+		 */
+		public function __construct() {}
+
 		function cf_input_text($conf) {
 			return cf_input::cf_input($conf);
 		}
@@ -587,6 +626,12 @@
 	}
 
 	class cf_input_select extends cf_input  {
+
+		/**
+		 * Constructor.
+		 */
+		public function __construct() {}
+
 		function cf_input_text($conf) {
 			return cf_input::cf_input($conf);
 		}
@@ -604,12 +649,24 @@
 	}
 
 	class cf_input_file extends cf_input {
+
+		/**
+		 * Constructor.
+		 */
+		public function __construct() {}
+
 		function cf_input_file($conf) {
 			return cf_input::cf_input($conf);
 		}
 	}
 	
 	class cf_input_date extends cf_input {
+
+		/**
+		 * Constructor.
+		 */
+		public function __construct() {}
+
 		function cf_input_date($conf) {
 			// We want to enqueue the jQuery datepicker for this.
 			wp_enqueue_script('jquery-ui-datepicker');

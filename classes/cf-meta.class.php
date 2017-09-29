@@ -31,6 +31,11 @@ class cf_meta {
 	var $post_id;
 
 	/**
+	 * Constructor.
+	 */
+	public function __construct() {}
+
+	/**
 	 * Construct - take the config array and prep for operation
 	 */
 	function cf_meta($config,$post_id) {
@@ -97,9 +102,11 @@ class cf_meta {
 	 * Calls the "add" method on the set so that the block is added to the post-meta block
 	 */
 	function display() {
-		foreach($this->config as $conf) {
-			$set = new cf_input_set($conf);
-			$set->add();
+		if ( ! empty( $this->config ) ) {
+			foreach ( $this->config as $conf ) {
+				$set = new cf_input_set( $conf );
+				$set->add();
+			}
 		}
 	}
 	

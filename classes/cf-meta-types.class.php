@@ -8,6 +8,11 @@ class cf_page_meta extends cf_meta_js {
 	var $type = 'page';
 
 	/**
+	 * Constructor.
+	 */
+	public function __construct() {}
+
+	/**
 	 * Construct
 	 */
 	function cf_page_meta($config,$post_id) {
@@ -23,6 +28,11 @@ class cf_post_meta extends cf_meta_js {
 	var $type = 'post';
 
 	/**
+	 * Constructor.
+	 */
+	public function __construct() {}
+
+	/**
 	 * Construct
 	 */
 	function cf_post_meta($config,$post_id) {
@@ -33,6 +43,11 @@ class cf_post_meta extends cf_meta_js {
 class cf_custom_meta extends cf_meta_js {
 
 	var $type = '';
+
+	/**
+	 * Constructor.
+	 */
+	public function __construct() {}
 
 	/**
 	 * Construct
